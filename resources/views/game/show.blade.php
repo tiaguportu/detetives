@@ -490,9 +490,9 @@
                                          x-data="{ 
                                             get fontSize() {
                                                 const textLength = $el.innerText.length;
-                                                if (textLength > 300) return 'text-[0.7rem] leading-tight';
-                                                if (textLength > 150) return 'text-sm leading-snug';
-                                                return 'text-base';
+                                                if (textLength > 300) return 'text-[0.6rem] md:text-[0.65rem] leading-tight';
+                                                if (textLength > 150) return 'text-[0.7rem] md:text-xs leading-snug';
+                                                return 'text-xs md:text-sm';
                                             }
                                          }"
                                          :class="fontSize">
