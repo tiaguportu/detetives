@@ -1,0 +1,728 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class GameSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        // Investigadores
+        \App\Models\Investigator::updateOrCreate(['name' => 'Rafael'], [
+            'countries_count' => 10,
+            'description' => 'O experiente detetive sênior. Nada escapa aos seus olhos.',
+            'avatar_path' => 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rafael',
+        ]);
+
+        \App\Models\Investigator::updateOrCreate(['name' => 'Celina'], [
+            'countries_count' => 8,
+            'description' => 'Especialista em história e cultura. Inteligência é sua maior arma.',
+            'avatar_path' => 'https://api.dicebear.com/7.x/avataaars/svg?seed=Celina',
+        ]);
+
+        \App\Models\Investigator::updateOrCreate(['name' => 'Samuel'], [
+            'countries_count' => 6,
+            'description' => 'O explorador atlético. Sempre pronto para a próxima aventura.',
+            'avatar_path' => 'https://api.dicebear.com/7.x/avataaars/svg?seed=Samuel',
+        ]);
+
+        \App\Models\Investigator::updateOrCreate(['name' => 'Joaquim'], [
+            'countries_count' => 2,
+            'description' => 'O jovem aprendiz. Começando sua carreira com muito entusiasmo.',
+            'avatar_path' => 'https://api.dicebear.com/7.x/avataaars/svg?seed=Joaquim',
+        ]);
+
+        // Países e Pistas
+        $countriesData = [
+            [
+                'name' => 'Portugal',
+                'slug' => 'portugal',
+                'history' => 'Fundado em 1143, é uma das nações mais antigas da Europa.',
+                'culture' => 'Famoso pelo Fado, pelos azulejos azuis e brancos e pela rica tradição da navegação.',
+                'geography' => 'Possui a costa mais ocidental da Europa e é famoso pelas ondas gigantes de Nazaré.',
+                'image_path' => 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=800',
+                'informant_name' => 'Zezé da Tabacaria',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=PortugalInformant',
+                'coord_x' => 46.5, 'coord_y' => 33.5,
+                'clues' => [
+                    ['type' => 'culture', 'content' => 'Ouvia os cantos melancólicos do Fado ecoando pelas ruelas de Alfama.'],
+                    ['type' => 'geography', 'content' => 'Ele disse que queria ver as ondas gigantes de Nazaré.'],
+                    ['type' => 'history', 'content' => 'O suspeito pesquisava sobre o Terremoto de 1755 que destruiu Lisboa.'],
+                    ['type' => 'culture', 'content' => 'Vi o suspeito saboreando um Pastel de Belém quentinho na bica.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que queria ir ao Cabo da Roca, o ponto mais ocidental da Europa.'],
+                    ['type' => 'landmark', 'content' => 'Ele foi visto admirando a arquitetura manuelina do Mosteiro dos Jerónimos.'],
+                    ['type' => 'history', 'content' => 'O criminoso estava lendo sobre a Era dos Descobrimentos e Vasco da Gama.'],
+                    ['type' => 'food', 'content' => 'O suspeito foi visto comendo um legítimo Bacalhau à Brás.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que subiria a Torre dos Clérigos no Porto.'],
+                    ['type' => 'culture', 'content' => 'Vi o criminoso comprando um Galo de Barcelos como souvenir.'],
+                    ['type' => 'economy', 'content' => 'Ele trocou dinheiro e recebeu notas de Euro com o mapa da Europa.'],
+                ]
+            ],
+            [
+                'name' => 'Brasil',
+                'slug' => 'brasil',
+                'history' => 'Descoberto oficialmente em 1500 por Pedro Álvares Cabral.',
+                'culture' => 'Lar do Samba, do Carnaval e de uma diversidade gastronômica única como a feijoada.',
+                'geography' => 'Abriga a maior parte da Floresta Amazônica e possui mais de 7.000 km de litoral.',
+                'image_path' => 'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?q=80&w=800',
+                'informant_name' => 'Capoeira do Pelourinho',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=BrazilInformant',
+                'coord_x' => 31.5, 'coord_y' => 63.5,
+                'clues' => [
+                    ['type' => 'culture', 'content' => 'O suspeito perguntava sobre a data oficial do desfile no Sambódromo.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que queria cruzar a Ponte da Amizade em direção ao Paraguai.'],
+                    ['type' => 'culture', 'content' => 'O criminoso foi visto comendo uma feijoada completa em Santa Teresa.'],
+                    ['type' => 'flora', 'content' => 'Ele carregava uma muda de Ipê Amarelo na bagagem.'],
+                    ['type' => 'fauna', 'content' => 'Ele estava tirando fotos de um Mico-leão-dourado na Mata Atlântica.'],
+                    ['type' => 'landmark', 'content' => 'Ele foi visto subindo o Corcovado para ver o Cristo Redentor.'],
+                    ['type' => 'geography', 'content' => 'O suspeito disse que relaxaria nas dunas dos Lençóis Maranhenses.'],
+                    ['type' => 'history', 'content' => 'Ele estava pesquisando sobre o Ciclo do Ouro nas cidades históricas de Minas Gerais.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que visitaria a capital planejada por Oscar Niemeyer.'],
+                    ['type' => 'geography', 'content' => 'O criminoso disse que veria as Cataratas do Iguaçu bem de perto.'],
+                    ['type' => 'food', 'content' => 'Vi o suspeito tomando um açaí gelado em uma barraca de praia.'],
+                ]
+            ],
+            [
+                'name' => 'Japão',
+                'slug' => 'japao',
+                'history' => 'Conhecido como a Terra do Sol Nascente, com uma linhagem imperial milenar.',
+                'culture' => 'Mistura tradições ancestrais de Samurais com tecnologia de ponta e cultura Pop (Anime).',
+                'geography' => 'Um arquipélago montanhoso dominado pelo imponente Monte Fuji.',
+                'image_path' => 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=800',
+                'informant_name' => 'Akira do Sushi',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=JapanInformant',
+                'coord_x' => 88.5, 'coord_y' => 35.5,
+                'clues' => [
+                    ['type' => 'culture', 'content' => 'O suspeito foi visto usando um quimono de seda durante o festival Sakura.'],
+                    ['type' => 'geography', 'content' => 'Ele comprou um bilhete de trem-bala (Shinkansen) para Tóquio.'],
+                    ['type' => 'culture', 'content' => 'Ele foi visto participando de uma luta de Sumô em Ryogoku.'],
+                    ['type' => 'history', 'content' => 'Ele visitou o Memorial da Paz em Hiroshima.'],
+                    ['type' => 'economy', 'content' => 'O suspeito pagou a conta em Ienes (¥).'],
+                    ['type' => 'culture', 'content' => 'Vi o criminoso entrando em uma loja de Mangás e Células de Anime.'],
+                    ['type' => 'food', 'content' => 'O suspeito estava comendo Takoyaki em uma barraca de rua em Osaka.'],
+                    ['type' => 'landmark', 'content' => 'Ele foi visto atravessando o famoso cruzamento de Shibuya.'],
+                    ['type' => 'culture', 'content' => 'O suspeito participou de uma cerimônia do chá tradicional em Quioto.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que subiria os mil portais torii do Fushimi Inari.'],
+                    ['type' => 'culture', 'content' => 'Vi o suspeito comprando uma espada Katana artesanal.'],
+                ]
+            ],
+            [
+                'name' => 'Egito',
+                'slug' => 'egito',
+                'history' => 'Lar de uma das civilizações mais antigas e poderosas da história, famosa pelos faraós.',
+                'culture' => 'Rica em mitologia, caligrafia hieroglífica e tradições de bazares milenares.',
+                'geography' => 'Quase totalmente desértico, é cortado pelo vital Rio Nilo de sul a norte.',
+                'image_path' => 'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?q=80&w=800',
+                'informant_name' => 'Ahmed o Guia',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=EgyptInformant',
+                'coord_x' => 55.5, 'coord_y' => 43.5,
+                'clues' => [
+                    ['type' => 'geography', 'content' => 'Ele disse que pegaria uma felucca para navegar pelo Rio Nilo.'],
+                    ['type' => 'history', 'content' => 'O suspeito carregava um mapa detalhado do Vale dos Reis.'],
+                    ['type' => 'culture', 'content' => 'Ele estava negociando um amuleto de escaravelho no bazar de Gizé.'],
+                    ['type' => 'history', 'content' => 'Ele tentava traduzir os hieróglifos na Pedra de Roseta.'],
+                    ['type' => 'geography', 'content' => 'Ele foi visto tirando fotos da Esfinge ao pôr do sol.'],
+                    ['type' => 'economy', 'content' => 'O criminoso mencionou a importância do Canal de Suez para o comércio internacional.'],
+                    ['type' => 'food', 'content' => 'Vi o suspeito comendo Koshary em um restaurante popular no Cairo.'],
+                    ['type' => 'culture', 'content' => 'Ele estava comprando papiros pintados à mão no mercado Khan el-Khalili.'],
+                    ['type' => 'landmark', 'content' => 'O suspeito visitou o Templo de Abu Simbel recentemente.'],
+                    ['type' => 'geography', 'content' => 'Ele disse que faria um mergulho no Mar Vermelho, em Sharm El Sheikh.'],
+                    ['type' => 'history', 'content' => 'O criminoso estava lendo sobre a vida da Rainha Cleópatra.'],
+                ]
+            ],
+            [
+                'name' => 'Itália',
+                'slug' => 'italia',
+                'history' => 'Berço do Império Romano e do Renascimento, moldou a arte e arquitetura ocidental.',
+                'culture' => 'Sinônimo de alta gastronomia, ópera, moda e um estilo de vida vibrante.',
+                'geography' => 'Uma península em formato de bota cercada pelos mares Mediterrâneo e Adriático.',
+                'image_path' => 'https://images.unsplash.com/photo-1529260839312-41777c08238d?q=80&w=800',
+                'informant_name' => 'Giovanni do Gelato',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=ItalyInformant',
+                'coord_x' => 51.5, 'coord_y' => 33.5,
+                'clues' => [
+                    ['type' => 'culture', 'content' => 'O suspeito foi visto saboreando um Gelato em frente à Fontana di Trevi.'],
+                    ['type' => 'history', 'content' => 'Ele estava lendo sobre a erupção do Vesúvio que soterrou Pompeia.'],
+                    ['type' => 'culture', 'content' => 'O criminoso comprou uma máscara para o Carnaval de Veneza.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que cruzaria o Rio Tibre em direção ao Vaticano.'],
+                    ['type' => 'culture', 'content' => 'Ele foi visto admirando a estátua de David na Galeria da Academia.'],
+                    ['type' => 'landmark', 'content' => 'O suspeito foi visto tirando a clássica foto segurando a Torre de Pisa.'],
+                    ['type' => 'culture', 'content' => 'Vi o criminoso entrando em um desfile de moda em Milão.'],
+                    ['type' => 'landmark', 'content' => 'Ele disse que visitaria os Museus Vaticanos para ver a Capela Sistina.'],
+                    ['type' => 'history', 'content' => 'O suspeito estava interessado na história dos gladiadores do Coliseu.'],
+                    ['type' => 'food', 'content' => 'Vi o suspeito comendo uma autêntica Pizza Napolitana.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que pegaria uma balsa para a Ilha de Capri.'],
+                ]
+            ],
+            [
+                'name' => 'França',
+                'slug' => 'franca',
+                'history' => 'Famosa pela Revolução Francesa e por sua influência cultural e política global.',
+                'culture' => 'Conhecida como o centro mundial da arte, filosofia e da culinária "haute cuisine".',
+                'geography' => 'Possui paisagens diversas, desde os Alpes cobertos de neve até a ensolarada Riviera.',
+                'image_path' => 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=800',
+                'informant_name' => 'Madame Pierre',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=FranceInformant',
+                'coord_x' => 48.5, 'coord_y' => 31.5,
+                'clues' => [
+                    ['type' => 'culture', 'content' => 'O suspeito foi visto perto da Torre Eiffel em Paris.'],
+                    ['type' => 'history', 'content' => 'Ele estava interessado na história da Queda da Bastilha.'],
+                    ['type' => 'culture', 'content' => 'O criminoso foi visto entrando no Museu do Louvre após o anoitecer.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que passaria o verão na Riviera Francesa.'],
+                    ['type' => 'culture', 'content' => 'Ele comprou uma boina e uma baguete no bairro de Montmartre.'],
+                    ['type' => 'landmark', 'content' => 'O suspeito visitou o Palácio de Versalhes e seus imensos jardins.'],
+                    ['type' => 'history', 'content' => 'O criminoso estava lendo uma biografia de Napoleão Bonaparte.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou o desfiladeiro de Vercors como esconderijo.'],
+                    ['type' => 'food', 'content' => 'Vi o suspeito saboreando escargots com manteiga e ervas.'],
+                    ['type' => 'landmark', 'content' => 'Ele foi visto admirando o Mont Saint-Michel durante a maré alta.'],
+                    ['type' => 'culture', 'content' => 'O suspeito disse que apreciaria um vinho fino em Bordeaux.'],
+                ]
+            ],
+            [
+                'name' => 'Estados Unidos',
+                'slug' => 'eua',
+                'history' => 'Tornou-se independente da Grã-Bretanha em 1776, tornando-se uma superpotência global.',
+                'culture' => 'Exportador global de entretenimento (Hollywood), Jazz, Blues e cultura de consumo.',
+                'geography' => 'Um país vasto com maravilhas naturais como o Grand Canyon e os Grandes Lagos.',
+                'image_path' => 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=800',
+                'informant_name' => 'Bill do Texas',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=USAInformant',
+                'coord_x' => 18.5, 'coord_y' => 35.5,
+                'clues' => [
+                    ['type' => 'culture', 'content' => 'O suspeito estava ansioso para assistir a um musical na Broadway.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que veria a Estátua da Liberdade pela manhã.'],
+                    ['type' => 'culture', 'content' => 'Ele foi visto em uma lanchonete pedindo uma torta de maçã (Apple Pie).'],
+                    ['type' => 'geography', 'content' => 'Ele pegou um voo para o Alasca para ver a Aurora Boreal.'],
+                    ['type' => 'geography', 'content' => 'Ele disse que faria uma road trip pela famosa Rota 66.'],
+                    ['type' => 'landmark', 'content' => 'O suspeito visitou o Grand Canyon e ficou impressionado com a profundidade.'],
+                    ['type' => 'culture', 'content' => 'Vi o criminoso tirando fotos das estrelas na Calçada da Fama em Hollywood.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que veria o geyser Old Faithful no parque Yellowstone.'],
+                    ['type' => 'economy', 'content' => 'O criminoso disse que visitaria as sedes tecnológicas no Vale do Silício.'],
+                    ['type' => 'history', 'content' => 'O suspeito estava lendo sobre os conflitos da Guerra Civil Americana.'],
+                    ['type' => 'culture', 'content' => 'Ele foi visto comendo uma lagosta em Maine.'],
+                ]
+            ],
+            [
+                'name' => 'China',
+                'slug' => 'china',
+                'history' => 'Uma das civilizações contínuas mais antigas do mundo, com dinastias imperiais duradouras.',
+                'culture' => 'Famosa pela caligrafia, cerimônia do chá e pela grandiosa arquitetura proibida.',
+                'geography' => 'Panorama diversificado que vai do Monte Everest até férteis vales de rios amarelos.',
+                'image_path' => 'https://images.unsplash.com/photo-1508197149814-0cc02e8b7f74?q=80&w=800',
+                'informant_name' => 'Wang do Mercado',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=ChinaInformant',
+                'coord_x' => 79.5, 'coord_y' => 38.5,
+                'clues' => [
+                    ['type' => 'geography', 'content' => 'O suspeito disse que caminharia pela Grande Muralha.'],
+                    ['type' => 'fauna', 'content' => 'Ele foi visto visitando um centro de preservação de Pandas Gigantes.'],
+                    ['type' => 'culture', 'content' => 'O criminoso estava aprendendo a usar hashis corretamente.'],
+                    ['type' => 'history', 'content' => 'Ele estava lendo sobre o primeiro Imperador e os Guerreiros de Terracota.'],
+                    ['type' => 'culture', 'content' => 'Ele foi visto festejando o Ano Novo com o desfile do Dragão.'],
+                    ['type' => 'landmark', 'content' => 'O suspeito visitou a Cidade Proibida em Pequim.'],
+                    ['type' => 'history', 'content' => 'O criminoso estava estudando as rotas comerciais da antiga Rota da Seda.'],
+                    ['type' => 'culture', 'content' => 'Vi o suspeito participando de uma prática de Tai Chi em um parque.'],
+                    ['type' => 'food', 'content' => 'O suspeito foi visto comendo Pato de Pequim em um restaurante tradicional.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que subiria as escadas do Templo do Céu.'],
+                    ['type' => 'economy', 'content' => 'O suspeito disse que negociaria eletrônicos em Shenzhen.'],
+                ]
+            ],
+            [
+                'name' => 'Alemanha',
+                'slug' => 'alemanha',
+                'history' => 'Famosa por sua história complexa, contribuições filosóficas e papel central na Europa.',
+                'culture' => 'Terra da música clássica, da Oktoberfest e de uma engenharia automotiva impecável.',
+                'geography' => 'Caracterizada pela mística Floresta Negra e pelo estratégico Vale do Rio Reno.',
+                'image_path' => 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=800',
+                'informant_name' => 'Hans da Cervejaria',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=GermanyInformant',
+                'coord_x' => 51.5, 'coord_y' => 26.5,
+                'clues' => [
+                    ['type' => 'culture', 'content' => 'O suspeito foi visto na Oktoberfest de Munique usando lederhosen.'],
+                    ['type' => 'history', 'content' => 'Ele estava visitando o Portão de Brandemburgo em Berlim.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou a Floresta Negra como um bom esconderijo.'],
+                    ['type' => 'history', 'content' => 'Ele estava interessado na história da queda do Muro de Berlim.'],
+                    ['type' => 'geography', 'content' => 'Ele disse que seguiria o curso do Rio Reno.'],
+                    ['type' => 'landmark', 'content' => 'O suspeito foi visto admirando o romântico Castelo de Neuschwanstein.'],
+                    ['type' => 'culture', 'content' => 'Vi o criminoso em um concerto de Bach em Leipzig.'],
+                    ['type' => 'economy', 'content' => 'Ele mencionou que testaria a velocidade do seu carro na Autobahn.'],
+                    ['type' => 'food', 'content' => 'Vi o suspeito comendo Currywurst com Batatas Fritas.'],
+                    ['type' => 'history', 'content' => 'O criminoso estava interessado na história da Bauhaus em Weimar.'],
+                    ['type' => 'geography', 'content' => 'O suspeito mencionou que veria o pôr do sol nos Alpes Bávaros.'],
+                ]
+            ],
+            [
+                'name' => 'México',
+                'slug' => 'mexico',
+                'history' => 'Berço das civilizações Asteca e Maia e marcado pela influência colonial espanhola.',
+                'culture' => 'Vibrante e colorida, conhecida pelos Mariachis, pela gastronomia picante e o Dia dos Mortos.',
+                'geography' => 'Possui desde grandes picos vulcânicos até praias paradisíacas na Riviera Maia.',
+                'image_path' => 'https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?q=80&w=800',
+                'informant_name' => 'Pancho do Mariachi',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=MexicoInformant',
+                'coord_x' => 18.5, 'coord_y' => 48.5,
+                'clues' => [
+                    ['type' => 'culture', 'content' => 'O suspeito estava celebrando o Dia dos Mortos com calaveras.'],
+                    ['type' => 'history', 'content' => 'Ele foi visto nas pirâmides de Chichén Itzá.'],
+                    ['type' => 'culture', 'content' => 'Ele contratou um grupo de Mariachis para uma festa particular.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que iria relaxar nas praias de Cancún.'],
+                    ['type' => 'culture', 'content' => 'Ele foi visto comendo tacos al pastor com muita pimenta.'],
+                    ['type' => 'history', 'content' => 'O suspeito visitou a Casa Azul de Frida Kahlo no Coyoacán.'],
+                    ['type' => 'landmark', 'content' => 'O criminoso foi visto subindo a Pirâmide do Sol em Teotihuacán.'],
+                    ['type' => 'food', 'content' => 'Ele mencionou que o chocolate tem origem no cacau cultivado aqui há séculos.'],
+                    ['type' => 'geography', 'content' => 'O suspeito disse que exploraria os cenotes escondidos de Yucatán.'],
+                    ['type' => 'culture', 'content' => 'Vi o criminoso comprando uma máscara de Lucha Libre.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que visitaria o vulcão Popocatépetl.'],
+                ]
+            ],
+            [
+                'name' => 'Peru',
+                'slug' => 'peru',
+                'history' => 'Coração do antigo Império Inca, com um legado arqueológico incomparável.',
+                'culture' => 'Marcada por tecidos coloridos, música andina e uma culinária de reconhecimento mundial.',
+                'geography' => 'Dominado pela Cordilheira dos Andes e pela majestosa cidadela de Machu Picchu.',
+                'image_path' => 'https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=800',
+                'informant_name' => 'Inca Moderno',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=PeruInformant',
+                'coord_x' => 28.5, 'coord_y' => 61.5,
+                'clues' => [
+                    ['type' => 'geography', 'content' => 'O suspeito disse que subiria até Machu Picchu.'],
+                    ['type' => 'history', 'content' => 'Ele estudava as linhas misteriosas de Nazca.'],
+                    ['type' => 'culture', 'content' => 'Ele comprou um poncho de lã de alpaca legítima.'],
+                    ['type' => 'geography', 'content' => 'Ele cruzou o Lago Titicaca em um barco de totora.'],
+                    ['type' => 'culture', 'content' => 'Ele provava o Pisco Sour em um bar de Lima.'],
+                    ['type' => 'food', 'content' => 'O suspeito mencionou que existem mais de 3.000 variedades de batatas cultivadas aqui.'],
+                    ['type' => 'landmark', 'content' => 'O criminoso foi visto explorando a Fortaleza de Sacsayhuamán.'],
+                    ['type' => 'fauna', 'content' => 'Ele foi visto tirando selfies com Lhamas e Alpacas no Valle Sagrado.'],
+                    ['type' => 'geography', 'content' => 'O suspeito disse que visitaria o Cânion de Colca para ver os Condores.'],
+                    ['type' => 'food', 'content' => 'Vi o criminoso experimentando um Ceviche de peixe fresco.'],
+                    ['type' => 'history', 'content' => 'O suspeito estava lendo sobre a queda do império para Francisco Pizarro.'],
+                ]
+            ],
+            [
+                'name' => 'Inglaterra',
+                'slug' => 'inglaterra',
+                'history' => 'Berço da Revolução Industrial e epicentro do vasto antigo Império Britânico.',
+                'culture' => 'Notável por sua literatura, a monarquia e a tradição sagrada do chá das cinco.',
+                'geography' => 'Uma ilha com campos verdes suaves e penhascos brancos icônicos em Dover.',
+                'image_path' => 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=800',
+                'informant_name' => 'Sir Winston',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=EnglandInformant',
+                'coord_x' => 47.5, 'coord_y' => 28.5,
+                'clues' => [
+                    ['type' => 'culture', 'content' => 'O suspeito parou tudo para o chá das cinco.'],
+                    ['type' => 'geography', 'content' => 'Vi o suspeito ajustando o relógio pelo Big Ben.'],
+                    ['type' => 'economy', 'content' => 'Ele pagou o taxi com notas de Libras Esterlinas (£).'],
+                    ['type' => 'history', 'content' => 'Ele estava lendo sobre a Rainha Vitória e a Era Industrial.'],
+                    ['type' => 'culture', 'content' => 'O criminoso comprou um guarda-chuva no centro de Londres.'],
+                    ['type' => 'landmark', 'content' => 'O suspeito visitou o misterioso monumento de Stonehenge.'],
+                    ['type' => 'history', 'content' => 'O criminoso estava lendo uma peça original de William Shakespeare.'],
+                    ['type' => 'landmark', 'content' => 'O suspeito foi visto perto do Palácio de Buckingham esperando a troca da guarda.'],
+                    ['type' => 'food', 'content' => 'Vi o suspeito comendo Fish and Chips embrulhado em jornal.'],
+                    ['type' => 'culture', 'content' => 'Ele mencionou que assistiria a um jogo da Premier League.'],
+                    ['type' => 'geography', 'content' => 'O criminoso disse que veria os White Cliffs de Dover.'],
+                ]
+            ],
+            [
+                'name' => 'Índia',
+                'slug' => 'india',
+                'history' => 'Lar de civilizações milenares, grandes religiões e da resistência pacífica de Gandhi.',
+                'culture' => 'Um mosaico infinito de festivais (como Holi), cores, aromas e a filosofia do Yoga.',
+                'geography' => 'Varia desde os picos nevados do Himalaia até as águas sagradas do Rio Ganges.',
+                'image_path' => 'https://images.unsplash.com/photo-1524492707947-2f85a512d7fb?q=80&w=800',
+                'informant_name' => 'Rajesh da Feira',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=IndiaInformant',
+                'coord_x' => 73.5, 'coord_y' => 45.5,
+                'clues' => [
+                    ['type' => 'culture', 'content' => 'O suspeito foi visto celebrando o Holi, o festival das cores.'],
+                    ['type' => 'geography', 'content' => 'O criminoso foi visto admirando o Taj Mahal ao amanhecer.'],
+                    ['type' => 'flora', 'content' => 'Ele estava comprando especiarias raras em um mercado local.'],
+                    ['type' => 'history', 'content' => 'Ele pesquisava sobre a resistência pacífica de Mahatma Gandhi.'],
+                    ['type' => 'geography', 'content' => 'Ele disse que iria meditar aos pés das montanhas do Himalaia.'],
+                    ['type' => 'geography', 'content' => 'O suspeito foi visto tomando um banho ritual nas águas do Rio Ganges.'],
+                    ['type' => 'culture', 'content' => 'Vi o criminoso vestindo um Sherwani elegante para um casamento.'],
+                    ['type' => 'landmark', 'content' => 'O suspeito visitou o Forte Vermelho em Déli.'],
+                    ['type' => 'culture', 'content' => 'O criminoso mencionou que adora os filmes coloridos de Bollywood.'],
+                    ['type' => 'food', 'content' => 'Vi o suspeito saboreando um frango Tikka Masala bem temperado.'],
+                    ['type' => 'fauna', 'content' => 'O suspeito mencionou que as vacas circulam livremente pelas ruas e são respeitadas.'],
+                ]
+            ],
+            [
+                'name' => 'Austrália',
+                'slug' => 'australia',
+                'history' => 'Povoada há milênios por aborígenes, tornou-se colônia penal britânica antes da independência.',
+                'culture' => 'Voltada para o ar livre, com fortes tradições de surfe e respeito à cultura aborígene.',
+                'geography' => 'Um ilha-continente com a Grande Barreira de Corais e o árido "Outback".',
+                'image_path' => 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?q=80&w=800',
+                'informant_name' => 'Mate do Outback',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=AustraliaInformant',
+                'coord_x' => 88.5, 'coord_y' => 75.5,
+                'clues' => [
+                    ['type' => 'geography', 'content' => 'Ele disse que faria mergulho na Grande Barreira de Corais.'],
+                    ['type' => 'fauna', 'content' => 'O suspeito foi visto fugindo de um Canguru bravo.'],
+                    ['type' => 'culture', 'content' => 'Ele foi visto assistindo a uma ópera na famosa Sydney Opera House.'],
+                    ['type' => 'culture', 'content' => 'Ele comprou um bumerangue em uma loja de arte aborígene.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que pegaria ondas gigantes em Bondi Beach.'],
+                    ['type' => 'landmark', 'content' => 'O suspeito visitou o monólito Uluru no coração do deserto.'],
+                    ['type' => 'fauna', 'content' => 'Vi o criminoso alimentando um Coala em um santuário.'],
+                    ['type' => 'geography', 'content' => 'O suspeito disse que enfrentaria o calor escaldante do Outback.'],
+                    ['type' => 'food', 'content' => 'Ele foi visto comendo uma torrada com Vegemite no café da manhã.'],
+                    ['type' => 'history', 'content' => 'O criminoso estava lendo sobre as origens do país como colônia penal.'],
+                    ['type' => 'fauna', 'content' => 'Vi o suspeito fugindo de uma aranha imensa em seu quarto de hotel.'],
+                ]
+            ],
+            [
+                'name' => 'Rússia',
+                'slug' => 'russia',
+                'history' => 'Maior país do mundo, com uma história de impérios czaristas e a era soviética.',
+                'culture' => 'Famosa pelo balé clássico, literatura profunda, e arquitetura de cúpulas coloridas.',
+                'geography' => 'Vasta extensão que cruza 11 fusos horários, dominada pelas planícies siberianas.',
+                'image_path' => 'https://images.unsplash.com/photo-1513326738677-b964603b136d?q=80&w=800',
+                'informant_name' => 'Dmitri da Praça',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=RussiaInformant',
+                'coord_x' => 70.5, 'coord_y' => 20.5,
+                'clues' => [
+                    ['type' => 'geography', 'content' => 'Ele disse que cruzaria o país a bordo do trem Transiberiano.'],
+                    ['type' => 'culture', 'content' => 'O suspeito comprou um conjunto de Matrioskas pintadas à mão.'],
+                    ['type' => 'history', 'content' => 'Ele foi visto caminhando pela Praça Vermelha em Moscou.'],
+                    ['type' => 'climate', 'content' => 'O criminoso reclamava do frio intenso de -30°C.'],
+                    ['type' => 'history', 'content' => 'Ele estava lendo sobre a Revolução Russa e os Czares Romanov.'],
+                    ['type' => 'culture', 'content' => 'O suspeito assistiu a uma apresentação no Balé Bolshoi.'],
+                    ['type' => 'history', 'content' => 'O criminoso estava lendo sobre a conquista do espaço por Yuri Gagarin.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que veria a beleza rústica do Lago Baikal.'],
+                    ['type' => 'landmark', 'content' => 'O suspeito foi visto admirando as cúpulas coloridas da Catedral de São Basílio.'],
+                    ['type' => 'food', 'content' => 'Vi o suspeito tomando uma sopa Borscht de beterraba.'],
+                    ['type' => 'history', 'content' => 'O criminoso disse que visitaria o Museu Hermitage em São Petersburgo.'],
+                ]
+            ],
+            [
+                'name' => 'Argentina',
+                'slug' => 'argentina',
+                'history' => 'Marcada por um passado colonial próspero e por ser o coração do sul americano.',
+                'culture' => 'Lar do Tango apaixonado, do churrasco (asado) e de uma forte paixão pelo futebol.',
+                'geography' => 'Possui desde os vastos Pampas férteis até os glaciares da Patagônia.',
+                'image_path' => 'https://images.unsplash.com/photo-1589909202802-8f4aadce1849?q=80&w=800',
+                'informant_name' => 'Diego do Caminito',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=ArgentinaInformant',
+                'coord_x' => 33.5, 'coord_y' => 78.5,
+                'clues' => [
+                    ['type' => 'culture', 'content' => 'O suspeito foi visto dançando Tango no Caminito.'],
+                    ['type' => 'geography', 'content' => 'Ele disse que queria ver as geleiras de Perito Moreno.'],
+                    ['type' => 'flora', 'content' => 'O criminoso estava tomando Mate em um parque de Buenos Aires.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que iria até Ushuaia, o "fim do mundo".'],
+                    ['type' => 'culture', 'content' => 'Ele foi visto comendo um bife de chorizo em uma Parrilla.'],
+                    ['type' => 'history', 'content' => 'O suspeito visitou o museu dedicado à Evita Perón.'],
+                    ['type' => 'culture', 'content' => 'Vi o criminoso em um estádio vibrando com uma partida de futebol.'],
+                    ['type' => 'geography', 'content' => 'O suspeito disse que veria as Cataratas do Iguaçu do lado argentino.'],
+                    ['type' => 'landmark', 'content' => 'O criminoso foi visto tirando fotos no Obelisco da Av. 9 de Julio.'],
+                    ['type' => 'food', 'content' => 'O suspeito comprou uma caixa de Alfajores de doce de leite.'],
+                    ['type' => 'history', 'content' => 'Ele mencionou que visitaria o histórico bairro portenho de San Telmo.'],
+                ]
+            ],
+            [
+                'name' => 'Espanha',
+                'slug' => 'espanha',
+                'history' => 'Antigo império global que espalhou o idioma castelhano por todo o mundo.',
+                'culture' => 'Famosa pelo Flamenco, pelas touradas e pelas festas que duram a noite toda.',
+                'geography' => 'Localizada na Península Ibérica, possui praias mediterrâneas e montanhas escarpadas.',
+                'image_path' => 'https://images.unsplash.com/photo-1543783230-2783cf879745?q=80&w=800',
+                'informant_name' => 'Manolo das Tapas',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=SpainInformant',
+                'coord_x' => 47.5, 'coord_y' => 33.5,
+                'clues' => [
+                    ['type' => 'landmark', 'content' => 'O suspeito foi visto admirando a Sagrada Família em Barcelona.'],
+                    ['type' => 'culture', 'content' => 'O criminoso participou de uma aula de Flamenco em Sevilha.'],
+                    ['type' => 'food', 'content' => 'Vi o suspeito comendo uma Paella de frutos do mar em Valência.'],
+                    ['type' => 'history', 'content' => 'O suspeito estava lendo "Dom Quixote", de Miguel de Cervantes.'],
+                    ['type' => 'economy', 'content' => 'Ele trocou dinheiro e recebeu notas de Euro com o mapa da Espanha.'],
+                    ['type' => 'culture', 'content' => 'O criminoso foi visto na festa La Tomatina, coberto de tomates.'],
+                    ['type' => 'landmark', 'content' => 'O suspeito visitou o Museu do Prado em Madrid.'],
+                    ['type' => 'food', 'content' => 'Vi o criminoso saboreando diversas "Tapas" em um bar local.'],
+                    ['type' => 'history', 'content' => 'O suspeito estava interessado na arquitetura moura do Alhambra.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que relaxaria nas Ilhas Baleares.'],
+                    ['type' => 'culture', 'content' => 'O criminoso disse que correria com os touros em Pamplona.'],
+                ]
+            ],
+            [
+                'name' => 'Canadá',
+                'slug' => 'canada',
+                'history' => 'Nação pacífica formada por influências francesas e britânicas.',
+                'culture' => 'Conhecido pela cortesia de seu povo e pelo amor visceral ao hóquei no gelo.',
+                'geography' => 'O segundo maior país do mundo, coberto por vastas florestas e lagos cristalinos.',
+                'image_path' => 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?q=80&w=800',
+                'informant_name' => 'Jean-Pierre do Québec',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=CanadaInformant',
+                'coord_x' => 18.5, 'coord_y' => 22.5,
+                'clues' => [
+                    ['type' => 'landmark', 'content' => 'O suspeito foi visto no topo da CN Tower em Toronto.'],
+                    ['type' => 'food', 'content' => 'Vi o criminoso comendo Poutine (batatas com queijo e gravy).'],
+                    ['type' => 'fauna', 'content' => 'O suspeito mencionou que veria ursos polares em Churchill.'],
+                    ['type' => 'economy', 'content' => 'Ele pagou as compras com notas azuis de 5 Dólares Canadenses.'],
+                    ['type' => 'fauna', 'content' => 'O criminoso foi visto tirando fotos da folha de Maple na bandeira.'],
+                    ['type' => 'culture', 'content' => 'O suspeito foi assistir a uma partida de Hóquei no Gelo.'],
+                    ['type' => 'landmark', 'content' => 'Vi o criminoso nas Cataratas do Niágara, todo molhado.'],
+                    ['type' => 'geography', 'content' => 'O suspeito disse que cruzaria as Rocky Mountains de trem.'],
+                    ['type' => 'history', 'content' => 'O criminoso disse que visitaria a histórica cidade murada de Québec.'],
+                    ['type' => 'flora', 'content' => 'O suspeito foi visto comprando xarope de maple (Maple Syrup) puro.'],
+                    ['type' => 'fauna', 'content' => 'Vi o criminoso observando alces na beira de uma estrada em Alberta.'],
+                ]
+            ],
+            [
+                'name' => 'Grécia',
+                'slug' => 'grecia',
+                'history' => 'Berço da democracia ocidental, da filosofia e dos Jogos Olímpicos.',
+                'culture' => 'Rica em mitologia e nobras tradições de hospitalidade e festa.',
+                'geography' => 'Um país mediterrâneo com milhares de ilhas e montanhas rochosas.',
+                'image_path' => 'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=800',
+                'informant_name' => 'Nikos de Santorini',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=GreeceInformant',
+                'coord_x' => 54.5, 'coord_y' => 35.5,
+                'clues' => [
+                    ['type' => 'history', 'content' => 'O suspeito visitou a Acrópole de Atenas para ver o Partenon.'],
+                    ['type' => 'culture', 'content' => 'O criminoso estava lendo sobre as lendas de Zeus e do Olimpo.'],
+                    ['type' => 'food', 'content' => 'Vi o suspeito comendo uma autêntica Moussaka em uma taverna.'],
+                    ['type' => 'geography', 'content' => 'O suspeito mencionou que pegaria uma balsa para Santorini.'],
+                    ['type' => 'food', 'content' => 'O criminoso foi visto comprando queijo Feta e azeitonas de Kalamata.'],
+                    ['type' => 'history', 'content' => 'O suspeito estava lendo sobre as conquistas de Alexandre, o Grande.'],
+                    ['type' => 'landmark', 'content' => 'Vi o suspeito testando a acústica do antigo Teatro de Epidauro.'],
+                    ['type' => 'culture', 'content' => 'O criminoso foi visto dançando o Sirtaki em uma festa local.'],
+                    ['type' => 'geography', 'content' => 'O suspeito disse que visitaria o Oráculo de Delfos.'],
+                    ['type' => 'culture', 'content' => 'Vi o criminoso quebrando pratos em uma celebração tradicional.'],
+                    ['type' => 'history', 'content' => 'O suspeito estava lendo sobre os primeiros Jogos Olímpicos em Olímpia.'],
+                ]
+            ],
+            [
+                'name' => 'Turquia',
+                'slug' => 'turquia',
+                'history' => 'Epicentro de impérios como o Bizantino e o Otomano ao longo dos séculos.',
+                'culture' => 'Uma ponte vibrante entre a cultura do Oriente Médio e da Europa.',
+                'geography' => 'O único país do mundo que se estende por dois continentes: Europa e Ásia.',
+                'image_path' => 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=800',
+                'informant_name' => 'Mustafá do Grand Bazaar',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=TurkeyInformant',
+                'coord_x' => 58.5, 'coord_y' => 35.5,
+                'clues' => [
+                    ['type' => 'landmark', 'content' => 'O suspeito visitou a Basílica de Santa Sofia (Hagia Sophia).'],
+                    ['type' => 'landmark', 'content' => 'Vi o criminoso em um balão de ar quente sobre a Capadócia.'],
+                    ['type' => 'food', 'content' => 'O suspeito foi visto comendo um Kebab e Baklava de sobremesa.'],
+                    ['type' => 'economy', 'content' => 'Ele pagou sua conta usando Liras Turcas (TRY).'],
+                    ['type' => 'landmark', 'content' => 'Vi o suspeito mergulhando nas piscinas brancas de Pamukkale.'],
+                    ['type' => 'culture', 'content' => 'O criminoso foi visto comprando um tapete feito à mão no Grand Bazaar.'],
+                    ['type' => 'culture', 'content' => 'O suspeito foi visto tomando chá em um copo em formato de tulipa.'],
+                    ['type' => 'history', 'content' => 'O criminoso estava lendo sobre a queda de Constantinopla.'],
+                    ['type' => 'history', 'content' => 'O suspeito visitou as ruínas da lendária cidade de Troia.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que cruzaria a Ponte do Bósforo para mudar de continente.'],
+                    ['type' => 'culture', 'content' => 'Vi o criminoso assistindo aos Dervixes Rodopiantes em uma cerimônia.'],
+                ]
+            ],
+            [
+                'name' => 'Tailândia',
+                'slug' => 'tailandia',
+                'history' => 'Estrategicamente independente durante a maior parte de sua história no Sudeste Asiático.',
+                'culture' => 'Famosa por sua hospitalidade, festivais de água e o respeito profundo pela monarquia.',
+                'geography' => 'Um paraíso tropical com selvas densas e praias de areia branca e águas cristalinas.',
+                'image_path' => 'https://images.unsplash.com/photo-1528181304800-2f173899950d?q=80&w=800',
+                'informant_name' => 'Somchai do Tuk Tuk',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=ThailandInformant',
+                'coord_x' => 81.5, 'coord_y' => 52.5,
+                'clues' => [
+                    ['type' => 'fauna', 'content' => 'O suspeito foi visto alimentando elefantes em um santuário.'],
+                    ['type' => 'landmark', 'content' => 'Vi o criminoso no Templo do Buda de Esmeralda em Bangkok.'],
+                    ['type' => 'food', 'content' => 'O suspeito foi visto comendo um Pad Thai apimentado em uma barraca.'],
+                    ['type' => 'culture', 'content' => 'O criminoso praticava movimentos de Muay Thai em uma academia.'],
+                    ['type' => 'geography', 'content' => 'O suspeito mencionou que visitaria a famosa baía de Maya Bay.'],
+                    ['type' => 'culture', 'content' => 'Vi o criminoso participando do Songkran, o festival da guerra de água.'],
+                    ['type' => 'economy', 'content' => 'O suspeito pagou seu Tuk Tuk com notas de Baht (THB).'],
+                    ['type' => 'culture', 'content' => 'Ele mencionou que o país é conhecido como a "Terra dos Sorrisos".'],
+                    ['type' => 'food', 'content' => 'Vi o suspeito tomando uma sopa Tom Yum Goong bem quente.'],
+                    ['type' => 'landmark', 'content' => 'O criminoso visitou o mercado flutuante de Damnoen Saduak.'],
+                    ['type' => 'history', 'content' => 'O suspeito estava lendo sobre as antigas ruínas de Ayutthaya.'],
+                ]
+            ],
+            [
+                'name' => 'Holanda',
+                'slug' => 'holanda',
+                'history' => 'Potência comercial marítima que moldou grande parte do comércio global.',
+                'culture' => 'Conhecida por sua tolerância, moinhos de vento históricos e pinturas de mestres mundiais.',
+                'geography' => 'Um país quase plano, com grande parte de seu território recuperado do mar.',
+                'image_path' => 'https://images.unsplash.com/photo-1512470876302-972fad2aa9dd?q=80&w=800',
+                'informant_name' => 'Sven do Moinho',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=NetherlandsInformant',
+                'coord_x' => 49.5, 'coord_y' => 26.5,
+                'clues' => [
+                    ['type' => 'landmark', 'content' => 'O suspeito foi visto passeando de barco pelos Canais de Amsterdã.'],
+                    ['type' => 'history', 'content' => 'O criminoso visitou a Casa de Anne Frank.'],
+                    ['type' => 'landmark', 'content' => 'Vi o suspeito tirando fotos dos Moinhos de Vento de Kinderdijk.'],
+                    ['type' => 'food', 'content' => 'O suspeito foi visto comprando Stroopwafels quentes no mercado.'],
+                    ['type' => 'geography', 'content' => 'Ele mencionou que muitos lugares aqui ficam abaixo do nível do mar.'],
+                    ['type' => 'flora', 'content' => 'O criminoso visitou o jardim de Keukenhof para o festival das Tulipas.'],
+                    ['type' => 'culture', 'content' => 'Vi o suspeito andando de bicicleta com milhares de outras pessoas.'],
+                    ['type' => 'art', 'content' => 'O criminoso visitou o Museu Van Gogh em Amsterdã.'],
+                    ['type' => 'food', 'content' => 'O suspeito foi visto comendo Bitterballen com mostarda.'],
+                    ['type' => 'culture', 'content' => 'Ele mencionou que veria a famosa pintura de Rembrandt, "A Ronda Noturna".'],
+                    ['type' => 'economy', 'content' => 'O criminoso disse que visitaria o maior leilão de flores do mundo.'],
+                ]
+            ],
+            [
+                'name' => 'Suíça',
+                'slug' => 'suica',
+                'history' => 'País conhecido por sua longa tradição de neutralidade e paz.',
+                'culture' => 'Sinônimo de qualidade, precisão relojoeira e um forte sistema democrático direto.',
+                'geography' => 'Abriga os picos mais majestosos dos Alpes e lagos glaciares deslumbrantes.',
+                'image_path' => 'https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=800',
+                'informant_name' => 'Heidi dos Alpes',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=SwitzerlandInformant',
+                'coord_x' => 50.5, 'coord_y' => 31.5,
+                'clues' => [
+                    ['type' => 'geography', 'content' => 'O suspeito mencionou que subiria a montanha Matterhorn.'],
+                    ['type' => 'economy', 'content' => 'Vi o criminoso comprando um relógio de luxo de alta precisão.'],
+                    ['type' => 'food', 'content' => 'O suspeito foi visto comendo um Fondue de queijo em um chalé.'],
+                    ['type' => 'economy', 'content' => 'Ele pagou as compras usando Francos Suíços (CHF).'],
+                    ['type' => 'economy', 'content' => 'O criminoso mencionou a segurança e o sigilo dos bancos locais.'],
+                    ['type' => 'landmark', 'content' => 'Vi o suspeito visitando a sede da ONU em Genebra.'],
+                    ['type' => 'food', 'content' => 'O suspeito foi visto comprando muitos chocolates finos como presente.'],
+                    ['type' => 'economy', 'content' => 'Vi o criminoso usando um canivete suíço original para abrir uma caixa.'],
+                    ['type' => 'landmark', 'content' => 'O suspeito disse que cruzaria o Túnel de Gotardo, o mais longo do mundo.'],
+                    ['type' => 'science', 'content' => 'Vi o criminoso visitando o CERN na fronteira com a França.'],
+                    ['type' => 'history', 'content' => 'O suspeito mencionou a neutralidade do país durante as grandes guerras.'],
+                ]
+            ],
+            [
+                'name' => 'África do Sul',
+                'slug' => 'africa-sul',
+                'history' => 'Marcada pelo fim do Apartheid e pela liderança inspiradora de Nelson Mandela.',
+                'culture' => 'Uma "Nação Arco-Íris" com 11 idiomas oficiais e uma rica herança étnica.',
+                'geography' => 'Extremidade sul do continente africano, entre os oceanos Atlântico e Índico.',
+                'image_path' => 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?q=80&w=800',
+                'informant_name' => 'Nelson do Cabo',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=SouthAfricaInformant',
+                'coord_x' => 52.5, 'coord_y' => 78.5,
+                'clues' => [
+                    ['type' => 'history', 'content' => 'O suspeito visitou o museu sobre a vida de Nelson Mandela.'],
+                    ['type' => 'nature', 'content' => 'Vi o criminoso em um safári no Parque Kruger tentando ver os "Big Five".'],
+                    ['type' => 'landmark', 'content' => 'O suspeito subiu de teleférico até o topo da Table Mountain.'],
+                    ['type' => 'geography', 'content' => 'O criminoso mencionou que visitaria o Cabo da Boa Esperança.'],
+                    ['type' => 'economy', 'content' => 'Ele trocou dinheiro e recebeu Rands sul-africanos (ZAR).'],
+                    ['type' => 'food', 'content' => 'Vi o suspeito comendo Biltong enquanto esperava o ônibus.'],
+                    ['type' => 'culture', 'content' => 'O criminoso mencionou a diversidade da "Nação Arco-Íris".'],
+                    ['type' => 'sport', 'content' => 'O suspeito foi visto em um jogo da seleção nacional de Rugby.'],
+                    ['type' => 'language', 'content' => 'Vi o criminoso tentando aprender algumas palavras em Africâner.'],
+                    ['type' => 'geography', 'content' => 'O suspeito mencionou que veria pinguins em Boulders Beach.'],
+                    ['type' => 'history', 'content' => 'O criminoso estava lendo sobre a importância de Robben Island.'],
+                ]
+            ],
+            [
+                'name' => 'Chile',
+                'slug' => 'chile',
+                'history' => 'Uma nação orgulhosa de sua literatura e sua luta contínua contra as forças da natureza.',
+                'culture' => 'Terra de grandes poetas, vinhos excepcionais e tradições dos povos originários Mapuche.',
+                'geography' => 'O país mais longo e estreito do mundo, espremido entre os Andes e o Pacífico.',
+                'image_path' => 'https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=800',
+                'informant_name' => 'Mateo do Atacama',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=ChileInformant',
+                'coord_x' => 28.5, 'coord_y' => 78.5,
+                'clues' => [
+                    ['type' => 'geography', 'content' => 'O suspeito mencionou que cruzaria o árido Deserto do Atacama.'],
+                    ['type' => 'landmark', 'content' => 'Vi o criminoso embarcando para a Ilha de Páscoa para ver os Moais.'],
+                    ['type' => 'nature', 'content' => 'O suspeito disse que faria uma trilha nas Torres del Paine.'],
+                    ['type' => 'food', 'content' => 'Vi o criminoso comendo uma generosa Empanada de Pino.'],
+                    ['type' => 'economy', 'content' => 'O suspeito pagou as compras com notas de Pesos Chilenos (CLP).'],
+                    ['type' => 'food', 'content' => 'Vi o criminoso apreciando um vinho da uva Carménère.'],
+                    ['type' => 'history', 'content' => 'O suspeito estava lendo a poesia de Pablo Neruda.'],
+                    ['type' => 'astronomy', 'content' => 'O criminoso mencionou que visitaria um observatório astronômico nos Andes.'],
+                    ['type' => 'geography', 'content' => 'O suspeito disse que veria os glaciares da Patagônia chilena.'],
+                    ['type' => 'history', 'content' => 'Vi o criminoso pesquisando sobre o terremoto de Valdivia.'],
+                    ['type' => 'culture', 'content' => 'O suspeito estava aprendendo sobre as tradições Mapuche em Temuco.'],
+                ]
+            ],
+            [
+                'name' => 'Colômbia',
+                'slug' => 'colombia',
+                'history' => 'Independente desde o início do século XIX, liderada por figuras como Simón Bolívar.',
+                'culture' => 'Conhecida por sua alegria, música vibrante e o "realismo mágico" de sua literatura.',
+                'geography' => 'Um país megadiverso com costas no Caribe e no Pacífico e picos andinos nevados.',
+                'image_path' => 'https://images.unsplash.com/photo-1583997051651-825524b6752d?q=80&w=800',
+                'informant_name' => 'Camilo do Café',
+                'informant_image_path' => 'https://api.dicebear.com/7.x/pixel-art/svg?seed=ColombiaInformant',
+                'coord_x' => 28.5, 'coord_y' => 53.5,
+                'clues' => [
+                    ['type' => 'landmark', 'content' => 'O suspeito visitou o Museu do Ouro em Bogotá.'],
+                    ['type' => 'food', 'content' => 'Vi o criminoso comendo uma farta Bandeja Paisa.'],
+                    ['type' => 'agriculture', 'content' => 'O suspeito disse que visitaria as fazendas de Café no Eixo Cafeeiro.'],
+                    ['type' => 'history', 'content' => 'O criminoso visitou a cidade amuralhada de Cartagena.'],
+                    ['type' => 'nature', 'content' => 'O suspeito mencionou que veria o rio de cinco cores, o Caño Cristales.'],
+                    ['type' => 'history', 'content' => 'Vi o criminoso lendo "Cem Anos de Solidão" de Gabriel García Márquez.'],
+                    ['type' => 'nature', 'content' => 'O suspeito viu o Santuário de Las Lajas construído em um desfiladeiro.'],
+                    ['type' => 'flora', 'content' => 'Vi o criminoso tirando fotos das imensas Palmas de Cera no Vale do Cocora.'],
+                    ['type' => 'music', 'content' => 'O suspeito estava dançando ao ritmo de Cumbia em uma praça.'],
+                    ['type' => 'economy', 'content' => 'O criminoso trocou suas notas por Pesos Colombianos (COP).'],
+                    ['type' => 'landmark', 'content' => 'Vi o suspeito subindo o Peñol de Guatapé para ver a vista.'],
+                ]
+            ],
+        ];
+
+        foreach ($countriesData as $cData) {
+            $cluesData = $cData['clues'] ?? [];
+            unset($cData['clues']);
+            
+            // Novos dados geográficos reais
+            $geodata = [
+                'portugal' => ['lat' => 39.399872, 'lng' => -8.224454],
+                'brasil' => ['lat' => -14.235004, 'lng' => -51.92528],
+                'japao' => ['lat' => 36.204824, 'lng' => 138.252924],
+                'egito' => ['lat' => 26.820553, 'lng' => 30.802498],
+                'italia' => ['lat' => 41.87194, 'lng' => 12.56738],
+                'franca' => ['lat' => 46.227638, 'lng' => 2.213749],
+                'eua' => ['lat' => 37.09024, 'lng' => -95.712891],
+                'china' => ['lat' => 35.86166, 'lng' => 104.195397],
+                'alemanha' => ['lat' => 51.165691, 'lng' => 10.451526],
+                'mexico' => ['lat' => 23.634501, 'lng' => -102.552784],
+                'peru' => ['lat' => -9.189967, 'lng' => -75.015152],
+                'inglaterra' => ['lat' => 52.3555177, 'lng' => -1.1743197],
+                'india' => ['lat' => 20.593684, 'lng' => 78.96288],
+                'australia' => ['lat' => -25.274398, 'lng' => 133.775136],
+                'russia' => ['lat' => 61.52401, 'lng' => 105.318756],
+                'argentina' => ['lat' => -38.416097, 'lng' => -63.616672],
+                'espanha' => ['lat' => 40.463667, 'lng' => -3.74922],
+                'canada' => ['lat' => 56.130366, 'lng' => -106.346771],
+                'grecia' => ['lat' => 39.074208, 'lng' => 21.824312],
+                'turquia' => ['lat' => 38.963745, 'lng' => 35.243322],
+                'tailandia' => ['lat' => 15.870032, 'lng' => 100.992541],
+                'holanda' => ['lat' => 52.132633, 'lng' => 5.291266],
+                'suica' => ['lat' => 46.818188, 'lng' => 8.227512],
+                'africa-sul' => ['lat' => -30.559482, 'lng' => 22.937506],
+                'chile' => ['lat' => -35.675147, 'lng' => -71.542969],
+                'colombia' => ['lat' => 4.570868, 'lng' => -74.297333],
+            ];
+
+            if (isset($geodata[$cData['slug']])) {
+                $cData['latitude'] = $geodata[$cData['slug']]['lat'];
+                $cData['longitude'] = $geodata[$cData['slug']]['lng'];
+            }
+
+            // Separar informantes da criação de Country
+            $informant_name = $cData['informant_name'] ?? null;
+            $informant_image = $cData['informant_image_path'] ?? null;
+            unset($cData['informant_name'], $cData['informant_image_path'], $cData['image_path']);
+            
+            $country = \App\Models\Country::updateOrCreate(['slug' => $cData['slug']], $cData);
+            
+            // Criar e associar informante
+            if ($informant_name) {
+                $informant = \App\Models\Informant::updateOrCreate(['name' => $informant_name], [
+                    'image_path' => $informant_image
+                ]);
+                $country->informants()->syncWithoutDetaching([$informant->id]);
+            }
+
+            $country->clues()->delete();
+            foreach ($cluesData as $clue) {
+                $country->clues()->create($clue);
+            }
+        }
+    }
+}
