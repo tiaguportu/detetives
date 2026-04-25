@@ -588,6 +588,42 @@
                         {{ $randomInformant?->name ?? 'Informante' }}
                     </div>
                 </div>
+
+                <!-- Tab: Travel (Mobile Only) -->
+                <div x-show="currentTab === 'travel'" class="md:hidden h-full pb-20">
+                    <div class="glass-panel p-4 h-full rounded-xl flex flex-col overflow-hidden">
+                        <h3 class="text-sm font-bold border-b border-[#00ff41] mb-4 uppercase shrink-0">Sistemas de Voo</h3>
+                        <div class="flex-grow overflow-y-auto custom-scrollbar mb-4">
+                            <form action="{{ route('game.travel', $game) }}" id="travelFormMobile" method="POST" 
+                                  @submit.prevent="
+                                    const selected = document.querySelector('#travelFormMobile input[name=country_id]:checked');
+                                    startFlight(selected.dataset.name, selected.dataset.x, selected.dataset.y, selected.dataset.lat, selected.dataset.lng);
+                                    setTimeout(() => $el.submit(), 4000);
+                                  "
+                                  class="space-y-2">
+                                @csrf
+                                @foreach($destinations as $dest)
+                                    <label class="block p-3 border border-[#00ff41]/20 rounded-lg active:bg-[#00ff41]/20">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center gap-3">
+                                                @if($dest->flag_path)
+                                                    <img src="{{ asset('storage/' . $dest->flag_path) }}" class="w-6 h-4 object-cover">
+                                                @else
+                                                    <span>🏳️</span>
+                                                @endif
+                                                <span class="text-xs uppercase tracking-wider">{{ $dest->name }}</span>
+                                            </div>
+                                            <input type="radio" name="country_id" value="{{ $dest->id }}" data-name="{{ $dest->name }}" data-x="{{ $dest->coord_x ?? 50 }}" data-y="{{ $dest->coord_y ?? 50 }}" data-lat="{{ $dest->latitude ?? 0 }}" data-lng="{{ $dest->longitude ?? 0 }}" class="accent-[#00ff41]" required>
+                                        </div>
+                                    </label>
+                                @endforeach
+                            </form>
+                        </div>
+                        <button type="submit" form="travelFormMobile" class="w-full bg-[#00ff41] text-black font-black py-4 uppercase tracking-widest rounded-lg text-sm shadow-[0_0_20px_rgba(0,255,65,0.3)]">
+                            Decolar
+                        </button>
+                    </div>
+                </div>
             </div>
         @endif
 
