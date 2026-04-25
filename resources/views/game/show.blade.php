@@ -565,17 +565,21 @@
                 </div>
 
                 <!-- Informant Panel (Animated Transition) - Functional for both Desktop and Mobile -->
-                <div x-show="showInformant" 
+                <div x-show="showInformant || currentTab === 'investigate'" 
                      x-transition:enter="transition opacity-0 duration-300"
                      x-transition:enter-end="opacity-100"
-                     class="absolute inset-0 bg-black z-[100] flex flex-col pointer-events-auto rounded-xl overflow-hidden shadow-2xl">
+                     class="absolute inset-0 bg-black z-40 flex flex-col pointer-events-auto rounded-xl overflow-hidden shadow-2xl">
                     
                     <div class="informant-bg-zoom active" 
                          style="background-image: url('{{ $currentCountry->images->first()?->image_path ? (str_contains($currentCountry->images->first()->image_path, 'http') ? $currentCountry->images->first()->image_path : asset('storage/' . $currentCountry->images->first()->image_path)) : asset('images/default_country.jpg') }}')">
                         <div class="absolute inset-0 bg-black/60"></div>
                     </div>
 
-                    <!-- Close Button Removed as Informant is always visible on this tab -->
+                    <!-- Botão de Fechar -->
+                    <button @click="showInformant = false; if(currentTab === 'investigate') currentTab = 'main'" 
+                            class="absolute top-4 right-4 z-[60] bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-lg hover:bg-red-700 transition-colors">
+                        X
+                    </button>
 
                     <img src="{{ $randomInformant?->image_path ? (str_contains($randomInformant->image_path, 'http') ? $randomInformant->image_path : asset('storage/' . $randomInformant->image_path)) : asset('images/default_informant.png') }}" 
                          class="informant-character grayscale brightness-110 active w-auto h-[40%] md:h-[50%]">
