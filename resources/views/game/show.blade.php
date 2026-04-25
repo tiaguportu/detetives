@@ -230,7 +230,7 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #00ff41; border-radius: 10px; }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4" 
+<body class="min-h-screen flex items-center justify-center md:p-4" 
       x-data="{ 
         isFlying: false, 
         showInformant: false, 
@@ -245,6 +245,7 @@
         origLat: {{ $currentCountry->latitude ?? 0 }},
         origLng: {{ $currentCountry->longitude ?? 0 }},
         leafletMap: null,
+        currentTab: 'main',
         
         initMap() {
             this.leafletMap = L.map('satellite-map', {
@@ -281,16 +282,16 @@
 
     <!-- Flight Overlay -->
     <div class="flight-overlay" :class="{ 'active': isFlying }" x-init="initMap()">
-        <div class="absolute top-8 w-full text-center z-10 pointer-events-none">
-            <div class="text-3xl uppercase tracking-[0.5em] text-[#00ff41] font-black mb-2">Transição de Setor</div>
-            <div class="text-sm font-bold flex justify-center items-center gap-8">
+        <div class="absolute top-8 w-full text-center z-10 pointer-events-none px-4">
+            <div class="text-xl md:text-3xl uppercase tracking-[0.2em] md:tracking-[0.5em] text-[#00ff41] font-black mb-2">Transição de Setor</div>
+            <div class="text-[10px] md:text-sm font-bold flex justify-center items-center gap-4 md:gap-8">
                 <span class="text-white tracking-widest">{{ $currentCountry->name }}</span>
-                <img src="{{ asset('images/airplane.png') }}" class="w-8 h-8 rotate-90 brightness-200">
+                <img src="{{ asset('images/airplane.png') }}" class="w-6 h-6 md:w-8 md:h-8 rotate-90 brightness-200">
                 <span x-text="travelingTo" class="text-white tracking-widest"></span>
             </div>
         </div>
 
-        <div class="radar-window">
+        <div class="radar-window w-full md:w-[1000px] h-[300px] md:h-[500px]">
             <div id="satellite-map"></div>
             
             <svg viewBox="0 0 1000 500" class="world-map" :style="mapStyle">
@@ -314,13 +315,13 @@
                       class="flight-path" id="flightPath" />
             </svg>
 
-            <div x-show="isFlying" class="absolute z-50 w-16 h-16" 
+            <div x-show="isFlying" class="absolute z-50 w-12 h-12 md:w-16 md:h-16" 
                  :style="`offset-path: path('M ${origX * 10} ${origY * 5} L ${destX * 10} ${destY * 5}'); offset-distance: 0%; animation: followPath 3.5s forwards cubic-bezier(0.4, 0, 0.2, 1); offset-rotate: auto 90deg;`"
                  style="filter: drop-shadow(0 0 10px #00ff41);">
                 <img src="{{ asset('images/airplane.png') }}" class="w-full h-full object-contain">
             </div>
             
-            <div class="absolute bottom-4 w-full text-center text-[10px] tracking-[1em] text-[#00ff41]/60 z-10 font-bold">
+            <div class="absolute bottom-4 w-full text-center text-[8px] md:text-[10px] tracking-[0.5em] md:tracking-[1em] text-[#00ff41]/60 z-10 font-bold px-2">
                 RADAR ATIVO | SETOR: [[ {{ strtoupper(Str::random(4)) }} ]] | GPS LOCK: CONFIRMADO
             </div>
         </div>
@@ -333,63 +334,69 @@
         </style>
     </div>
 
-    <div class="pda-screen p-8 flex flex-col" x-data="{ currentTab: 'main' }">
+    <div class="pda-screen p-4 md:p-8 flex flex-col">
         <div class="scanline"></div>
 
         <!-- Header -->
-        <div class="flex justify-between items-center border-b border-[#00ff41]/50 pb-6 mb-6">
-            <div class="flex items-center gap-6">
-                <div class="w-16 h-16 border-2 border-[#00ff41] rounded-full overflow-hidden bg-black shrink-0">
+        <div class="flex justify-between items-center border-b border-[#00ff41]/50 pb-4 md:pb-6 mb-4 md:mb-6 shrink-0">
+            <div class="flex items-center gap-3 md:gap-6">
+                <div class="w-10 h-10 md:w-16 md:h-16 border-2 border-[#00ff41] rounded-full overflow-hidden bg-black shrink-0">
                     <img src="{{ str_contains($game->investigator->avatar_path, 'http') ? $game->investigator->avatar_path : asset('storage/' . $game->investigator->avatar_path) }}" class="w-full h-full object-cover">
                 </div>
-                <div>
-                    <h1 class="text-2xl font-bold uppercase tracking-widest text-white">Agente: {{ $game->investigator->name }}</h1>
-                    <p class="text-[10px] text-[#00ff41]/60 tracking-widest uppercase">Missão: Perseguição Internacional | Status: {{ strtoupper($game->status) }}</p>
+                <div class="max-w-[150px] md:max-w-none">
+                    <h1 class="text-sm md:text-2xl font-bold uppercase tracking-widest text-white truncate">{{ $game->investigator->name }}</h1>
+                    <p class="hidden md:block text-[10px] text-[#00ff41]/60 tracking-widest uppercase">Missão: Perseguição Internacional | Status: {{ strtoupper($game->status) }}</p>
+                    <p class="md:hidden text-[8px] text-[#00ff41]/60 tracking-widest uppercase">Passo {{ $game->current_step }}/{{ $game->total_steps }}</p>
                 </div>
             </div>
-            <div class="text-right">
+            <div class="text-right hidden md:block">
                 <p class="text-xl">Passo: {{ $game->current_step }} / {{ $game->total_steps }}</p>
                 <div class="w-48 h-2 bg-gray-800 border border-[#00ff41]">
+                    <div class="h-full bg-[#00ff41]" style="width: {{ ($game->current_step / $game->total_steps) * 100 }}%"></div>
+                </div>
+            </div>
+            <div class="md:hidden text-right">
+                <div class="w-20 h-1.5 bg-gray-800 border border-[#00ff41]">
                     <div class="h-full bg-[#00ff41]" style="width: {{ ($game->current_step / $game->total_steps) * 100 }}%"></div>
                 </div>
             </div>
         </div>
 
         @if(session('message'))
-            <div class="bg-green-900 text-green-200 p-4 mb-4 border border-green-500 animate-pulse">
+            <div class="bg-green-900/50 text-green-200 p-3 mb-4 border border-green-500 text-xs md:text-sm animate-pulse shrink-0">
                 {{ session('message') }}
             </div>
         @endif
 
         @if(session('error'))
-            <div class="bg-red-900 text-red-200 p-4 mb-4 border border-red-500 animate-pulse">
+            <div class="bg-red-900/50 text-red-200 p-3 mb-4 border border-red-500 text-xs md:text-sm animate-pulse shrink-0">
                 {{ session('error') }}
             </div>
         @endif
 
         @if($game->status === 'won')
-            <div class="flex-grow flex items-center justify-center relative overflow-hidden">
+            <div class="flex-grow flex items-center justify-center relative overflow-hidden p-4">
                 <div class="scanline"></div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-6xl items-center">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 w-full max-w-6xl items-center pb-20 md:pb-0">
                     
                     <!-- Left: Success Text & Actions -->
-                    <div class="space-y-8 text-left order-2 md:order-1">
-                        <div class="px-6 py-2 bg-red-600 text-white font-black text-xl uppercase tracking-[0.4em] animate-pulse inline-block rounded-full shadow-[0_0_40px_rgba(220,38,38,0.3)]">
+                    <div class="space-y-6 md:space-y-8 text-center md:text-left order-2 md:order-1">
+                        <div class="px-4 py-1 md:px-6 md:py-2 bg-red-600 text-white font-black text-sm md:text-xl uppercase tracking-[0.2em] md:tracking-[0.4em] animate-pulse inline-block rounded-full shadow-[0_0_40px_rgba(220,38,38,0.3)]">
                             ALERTA: VILÃO CAPTURADO
                         </div>
 
-                        <div class="space-y-4">
-                            <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-widest leading-none">Missão<br>Cumprida!</h2>
-                            <p class="text-sm md:text-base text-[#00ff41]/80 max-w-md leading-relaxed">O gênio do crime Tom Riddle foi interceptado. Seus esforços garantiram a segurança dos artefatos globais e a paz mundial foi restaurada.</p>
+                        <div class="space-y-3 md:space-y-4">
+                            <h2 class="text-3xl md:text-6xl font-black text-white uppercase tracking-widest leading-none">Missão<br>Cumprida!</h2>
+                            <p class="text-[10px] md:text-sm text-[#00ff41]/80 max-w-sm md:max-w-md mx-auto md:mx-0 leading-relaxed">O gênio do crime Tom Riddle foi interceptado. Seus esforços garantiram a segurança dos artefatos globais.</p>
                         </div>
 
-                        <div class="flex flex-col gap-4">
-                            <a href="{{ route('game.start', $game->investigator_id) }}" class="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-xl font-black text-black rounded-lg group bg-[#00ff41] hover:shadow-[0_0_40px_rgba(0,255,65,0.6)] transition-all px-10 py-5 uppercase tracking-[0.2em]">
+                        <div class="flex flex-col gap-3 md:gap-4 max-w-xs mx-auto md:mx-0">
+                            <a href="{{ route('game.start', $game->investigator_id) }}" class="relative inline-flex items-center justify-center text-sm md:text-xl font-black text-black rounded-lg group bg-[#00ff41] hover:shadow-[0_0_40px_rgba(0,255,65,0.6)] transition-all px-6 py-4 md:px-10 md:py-5 uppercase tracking-[0.2em]">
                                 Reiniciar Missão
                             </a>
 
-                            <a href="{{ route('home') }}" class="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-xl font-black text-[#00ff41] border-2 border-[#00ff41] rounded-lg group hover:bg-[#00ff41] hover:text-black transition-all px-10 py-5 uppercase tracking-[0.2em]">
+                            <a href="{{ route('home') }}" class="relative inline-flex items-center justify-center text-xs md:text-xl font-black text-[#00ff41] border-2 border-[#00ff41] rounded-lg group hover:bg-[#00ff41] hover:text-black transition-all px-6 py-3 md:px-10 md:py-5 uppercase tracking-[0.2em]">
                                 Finalizar Dossiê
                             </a>
                         </div>
@@ -399,10 +406,10 @@
                     <div class="flex justify-center order-1 md:order-2">
                         <div class="relative group">
                             <div class="absolute -inset-1 bg-gradient-to-r from-red-600 to-yellow-600 rounded-2xl blur opacity-20 group-hover:opacity-100 transition duration-1000"></div>
-                            <div class="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px] border-4 border-red-600 rounded-2xl overflow-hidden glass-panel rotate-3 hover:rotate-0 transition-transform duration-500 shadow-[0_0_60px_rgba(220,38,38,0.2)]">
+                            <div class="relative w-[180px] h-[180px] md:w-[450px] md:h-[450px] border-4 border-red-600 rounded-2xl overflow-hidden glass-panel rotate-3 hover:rotate-0 transition-transform duration-500 shadow-[0_0_60px_rgba(220,38,38,0.2)]">
                                 <img src="{{ asset('images/tom_riddle_captured.png') }}" class="w-full h-full object-cover">
-                                <div class="absolute bottom-0 left-0 w-full bg-black/80 p-4 border-t-2 border-red-500">
-                                    <p class="text-xl font-black text-red-500 italic tracking-tighter animate-[typeIn_2s_steps(20)_forwards]">
+                                <div class="absolute bottom-0 left-0 w-full bg-black/80 p-2 md:p-4 border-t-2 border-red-500">
+                                    <p class="text-xs md:text-xl font-black text-red-500 italic tracking-tighter">
                                         "Eu vou voltar..."
                                     </p>
                                 </div>
@@ -420,171 +427,226 @@
             </style>
         @else
             <!-- Main Game Area -->
-            <div class="flex-grow grid grid-cols-1 md:grid-cols-3 gap-8 relative overflow-hidden">
+            <div class="flex-grow relative overflow-hidden">
                 
-                <!-- Left: Location Info -->
-                <div class="col-span-1 space-y-4 flex flex-col overflow-hidden">
-                    <div class="glass-panel p-4 flex-grow flex flex-col rounded-xl overflow-hidden">
-                        <h3 class="text-lg font-bold border-b border-[#00ff41] mb-2 uppercase tracking-tighter shrink-0">Local: {{ $currentCountry->name }}</h3>
-                        <div class="bg-black border border-[#00ff41]/50 aspect-video mb-4 flex items-center justify-center overflow-hidden rounded-lg shadow-inner relative shrink-0"
-                             x-data="{ 
-                                images: {{ $currentCountry->images->pluck('image_path')->map(fn($p) => str_contains($p, 'http') ? $p : asset('storage/' . $p)) }},
-                                currentIndex: 0
-                             }"
-                             x-init="if(images.length > 1) setInterval(() => { currentIndex = (currentIndex + 1) % images.length }, 5000)">
-                            
-                            <template x-for="(img, index) in images" :key="index">
-                                <img :src="img" 
-                                     x-show="currentIndex === index"
-                                     x-transition:enter="transition opacity-100 duration-1000"
-                                     x-transition:enter-start="opacity-0"
-                                     x-transition:leave="transition opacity-0 duration-1000"
-                                     class="absolute inset-0 w-full h-full object-cover">
-                            </template>
-
-                            <div x-show="images.length > 1" class="absolute bottom-2 right-2 flex gap-1 z-10">
+                <!-- Tab: Main (Location Info) -->
+                <div x-show="currentTab === 'main'" class="h-full grid grid-cols-1 md:grid-cols-3 gap-8 pb-20 md:pb-0">
+                    <!-- Left Side (Always present on Desktop) -->
+                    <div class="col-span-1 space-y-4 flex flex-col overflow-hidden">
+                        <div class="glass-panel p-4 flex-grow flex flex-col rounded-xl overflow-hidden">
+                            <h3 class="text-sm md:text-lg font-bold border-b border-[#00ff41] mb-2 uppercase tracking-tighter shrink-0">Dossiê: {{ $currentCountry->name }}</h3>
+                            <div class="bg-black border border-[#00ff41]/50 aspect-video mb-4 flex items-center justify-center overflow-hidden rounded-lg shadow-inner relative shrink-0"
+                                 x-data="{ 
+                                    images: {{ $currentCountry->images->pluck('image_path')->map(fn($p) => str_contains($p, 'http') ? $p : asset('storage/' . $p)) }},
+                                    currentIndex: 0
+                                 }"
+                                 x-init="if(images.length > 1) setInterval(() => { currentIndex = (currentIndex + 1) % images.length }, 5000)">
+                                
                                 <template x-for="(img, index) in images" :key="index">
-                                    <div class="w-1.5 h-1.5 rounded-full border border-[#00ff41]"
-                                         :class="currentIndex === index ? 'bg-[#00ff41]' : 'bg-transparent'"></div>
+                                    <img :src="img" 
+                                         x-show="currentIndex === index"
+                                         x-transition:enter="transition opacity-100 duration-1000"
+                                         x-transition:enter-start="opacity-0"
+                                         x-transition:leave="transition opacity-0 duration-1000"
+                                         class="absolute inset-0 w-full h-full object-cover">
+                                </template>
+
+                                <div x-show="images.length > 1" class="absolute bottom-2 right-2 flex gap-1 z-10">
+                                    <template x-for="(img, index) in images" :key="index">
+                                        <div class="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full border border-[#00ff41]"
+                                             :class="currentIndex === index ? 'bg-[#00ff41]' : 'bg-transparent'"></div>
+                                    </template>
+                                </div>
+
+                                <template x-if="images.length === 0">
+                                    <span class="text-3xl md:text-6xl grayscale">🏢</span>
                                 </template>
                             </div>
-
-                            <template x-if="images.length === 0">
-                                <span class="text-6xl grayscale">🏢</span>
-                            </template>
-                        </div>
-                        <div class="flex-grow overflow-y-auto text-sm space-y-4 pr-2 custom-scrollbar">
-                            <p><strong class="text-[#00ff41]/60">CULTURA:</strong> {{ $currentCountry->culture }}</p>
-                            <p><strong class="text-[#00ff41]/60">HISTÓRIA:</strong> {{ $currentCountry->history }}</p>
-                            <p><strong class="text-[#00ff41]/60">GEOGRAFIA:</strong> {{ $currentCountry->geography }}</p>
+                            <div class="flex-grow overflow-y-auto text-[10px] md:text-sm space-y-3 md:space-y-4 pr-2 custom-scrollbar">
+                                <p><strong class="text-[#00ff41]/60">CULTURA:</strong> {{ $currentCountry->culture }}</p>
+                                <p><strong class="text-[#00ff41]/60">HISTÓRIA:</strong> {{ $currentCountry->history }}</p>
+                                <p><strong class="text-[#00ff41]/60">GEOGRAFIA:</strong> {{ $currentCountry->geography }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Middle: Interaction Area -->
-                <div class="col-span-1 flex flex-col space-y-4 overflow-hidden">
-                    <div class="glass-panel p-6 flex-grow relative overflow-hidden rounded-xl">
-                        <h3 class="text-lg font-bold border-b border-[#00ff41] mb-6 uppercase shrink-0">Investigar</h3>
-                        
-                        <div class="flex flex-col items-center justify-center h-full space-y-6" x-show="!showInformant">
-                            <button @click="showInformant = true; 
-                                            setTimeout(() => { informantActive = true }, 100);" 
-                                    class="w-full py-8 border-2 border-dashed border-[#00ff41]/40 hover:border-[#00ff41] hover:bg-[#00ff41]/5 transition flex flex-col items-center rounded-xl">
-                                <span class="text-4xl mb-4">🕵️‍♂️</span>
-                                <span class="uppercase font-bold">Procurar Informante</span>
-                            </button>
-                        </div>
-
-                        <!-- Informant Panel (Animated Transition) -->
-                        <div x-show="showInformant" 
-                             class="absolute inset-0 bg-black z-20 flex flex-col pointer-events-auto">
-                            
-                            <!-- Background Country Zoom -->
-                            <div class="informant-bg-zoom" 
-                                 :class="{ 'active': informantActive }"
-                                 style="background-image: url('{{ $currentCountry->images->first()?->image_path ? (str_contains($currentCountry->images->first()->image_path, 'http') ? $currentCountry->images->first()->image_path : asset('storage/' . $currentCountry->images->first()->image_path)) : asset('images/default_country.jpg') }}')">
-                                <div class="absolute inset-0 bg-black/40"></div>
-                            </div>
-
-                            <!-- Close Button (Top Z-Index) -->
-                            <div class="absolute top-4 right-4 z-[60]">
-                                <button @click="informantActive = false; setTimeout(() => { showInformant = false }, 800)" 
-                                        class="bg-red-600 text-white font-bold px-4 py-1 rounded hover:bg-red-700 transition">
-                                    VOLTAR [X]
+                    <!-- Hidden on Mobile when on Main tab, shown on Desktop -->
+                    <div class="hidden md:flex col-span-1 flex-col space-y-4 overflow-hidden">
+                        <div class="glass-panel p-6 flex-grow relative overflow-hidden rounded-xl">
+                            <h3 class="text-lg font-bold border-b border-[#00ff41] mb-6 uppercase shrink-0">Investigar</h3>
+                            <div class="flex flex-col items-center justify-center h-full space-y-6">
+                                <button @click="showInformant = true; setTimeout(() => { informantActive = true }, 100);" 
+                                        class="w-full py-8 border-2 border-dashed border-[#00ff41]/40 hover:border-[#00ff41] hover:bg-[#00ff41]/5 transition flex flex-col items-center rounded-xl">
+                                    <span class="text-4xl mb-4">🕵️‍♂️</span>
+                                    <span class="uppercase font-bold">Procurar Informante</span>
                                 </button>
                             </div>
+                        </div>
+                    </div>
 
-                            <!-- Informant Character Slide In -->
-                            <img src="{{ $randomInformant?->image_path ? (str_contains($randomInformant->image_path, 'http') ? $randomInformant->image_path : asset('storage/' . $randomInformant->image_path)) : asset('images/default_informant.png') }}" 
-                                 class="informant-character grayscale brightness-110" 
-                                 :class="{ 'active': informantActive }">
-
-                            <!-- Comic Speech Bubble -->
-                            <div class="comic-bubble" :class="{ 'active': informantActive }">
-                                <div class="space-y-4 pr-1"
-                                     x-data="{ 
-                                        get fontSize() {
-                                            const textLength = $el.innerText.length;
-                                            if (textLength > 400) return 'text-[0.7rem] leading-tight';
-                                            if (textLength > 250) return 'text-sm leading-snug';
-                                            return 'text-base';
-                                        }
-                                     }"
-                                     :class="fontSize">
-                                    @foreach($clues as $clue)
-                                        <p class="italic">"{{ $clue->content }}"</p>
+                    <div class="hidden md:flex col-span-1 flex-col space-y-4 overflow-hidden">
+                        <div class="glass-panel p-6 flex-grow rounded-xl flex flex-col overflow-hidden">
+                            <h3 class="text-lg font-bold border-b border-[#00ff41] mb-4 uppercase shrink-0">Sistemas de Voo</h3>
+                            <p class="text-xs mb-6 opacity-60 shrink-0">Selecione as coordenadas do próximo destino:</p>
+                            
+                            <div class="flex-grow overflow-y-auto custom-scrollbar pr-2 mb-4">
+                                <form action="{{ route('game.travel', $game) }}" id="travelFormDesktop" method="POST" 
+                                      @submit.prevent="
+                                        const selected = document.querySelector('input[name=country_id]:checked');
+                                        startFlight(selected.dataset.name, selected.dataset.x, selected.dataset.y, selected.dataset.lat, selected.dataset.lng);
+                                        setTimeout(() => $el.submit(), 4000);
+                                      "
+                                      class="space-y-3">
+                                    @csrf
+                                    @foreach($destinations as $dest)
+                                        <label class="block p-4 border border-[#00ff41]/20 hover:border-[#00ff41] hover:bg-[#00ff41]/5 cursor-pointer transition rounded-lg group">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center gap-4">
+                                                    @if($dest->flag_path)
+                                                        <img src="{{ asset('storage/' . $dest->flag_path) }}" class="w-8 h-5 object-cover rounded-sm border border-[#00ff41]/30">
+                                                    @else
+                                                        <span class="text-xl">🏳️</span>
+                                                    @endif
+                                                    <span class="tracking-widest">{{ $dest->name }}</span>
+                                                </div>
+                                                <input type="radio" name="country_id" value="{{ $dest->id }}" data-name="{{ $dest->name }}" data-x="{{ $dest->coord_x ?? 50 }}" data-y="{{ $dest->coord_y ?? 50 }}" data-lat="{{ $dest->latitude ?? 0 }}" data-lng="{{ $dest->longitude ?? 0 }}" class="accent-[#00ff41]" required>
+                                            </div>
+                                        </label>
                                     @endforeach
-                                </div>
+                                </form>
                             </div>
-
-                            <!-- News Label Name (Bottom Right) -->
-                            <div class="news-label" :class="{ 'active': informantActive }">
-                                {{ $randomInformant?->name ?? 'Informante' }}
-                            </div>
+                            <button type="submit" form="travelFormDesktop" class="w-full bg-[#00ff41] text-black font-bold py-4 hover:shadow-[0_0_30px_rgba(0,255,65,0.5)] transition uppercase tracking-[0.3em] rounded-lg shrink-0">
+                                Iniciar Decolagem
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right: Travel Actions -->
-                <div class="col-span-1 flex flex-col space-y-4 overflow-hidden">
-                    <div class="glass-panel p-6 flex-grow rounded-xl flex flex-col overflow-hidden">
-                        <h3 class="text-lg font-bold border-b border-[#00ff41] mb-4 uppercase shrink-0">Sistemas de Voo</h3>
-                        <p class="text-xs mb-6 opacity-60 shrink-0">Selecione as coordenadas do próximo destino:</p>
-                        
-                        <div class="flex-grow overflow-y-auto custom-scrollbar pr-2 mb-4">
-                            <form action="{{ route('game.travel', $game) }}" id="travelForm" method="POST" 
+                <!-- Tab: Investigate (Mobile Only) -->
+                <div x-show="currentTab === 'investigate'" class="md:hidden h-full pb-20">
+                    <div class="glass-panel p-4 h-full relative overflow-hidden rounded-xl flex flex-col">
+                        <h3 class="text-sm font-bold border-b border-[#00ff41] mb-6 uppercase shrink-0">Investigar</h3>
+                        <div class="flex-grow flex flex-col items-center justify-center">
+                            <button @click="showInformant = true; setTimeout(() => { informantActive = true }, 100);" 
+                                    class="w-full py-12 border-2 border-dashed border-[#00ff41]/40 flex flex-col items-center rounded-xl bg-[#00ff41]/5">
+                                <span class="text-5xl mb-4">🕵️‍♂️</span>
+                                <span class="uppercase font-bold text-xs tracking-widest">Interrogar Local</span>
+                            </button>
+                            <p class="text-[8px] mt-4 text-center opacity-50 uppercase tracking-[0.2em]">Procure por pistas sobre o paradeiro do suspeito</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Travel (Mobile Only) -->
+                <div x-show="currentTab === 'travel'" class="md:hidden h-full pb-20">
+                    <div class="glass-panel p-4 h-full rounded-xl flex flex-col overflow-hidden">
+                        <h3 class="text-sm font-bold border-b border-[#00ff41] mb-4 uppercase shrink-0">Sistemas de Voo</h3>
+                        <div class="flex-grow overflow-y-auto custom-scrollbar mb-4">
+                            <form action="{{ route('game.travel', $game) }}" id="travelFormMobile" method="POST" 
                                   @submit.prevent="
-                                    const selected = document.querySelector('input[name=country_id]:checked');
-                                    startFlight(
-                                        selected.dataset.name, 
-                                        selected.dataset.x, 
-                                        selected.dataset.y,
-                                        selected.dataset.lat,
-                                        selected.dataset.lng
-                                    );
+                                    const selected = document.querySelector('#travelFormMobile input[name=country_id]:checked');
+                                    startFlight(selected.dataset.name, selected.dataset.x, selected.dataset.y, selected.dataset.lat, selected.dataset.lng);
                                     setTimeout(() => $el.submit(), 4000);
                                   "
-                                  class="space-y-3">
+                                  class="space-y-2">
                                 @csrf
                                 @foreach($destinations as $dest)
-                                    <label class="block p-4 border border-[#00ff41]/20 hover:border-[#00ff41] hover:bg-[#00ff41]/5 cursor-pointer transition rounded-lg group">
+                                    <label class="block p-3 border border-[#00ff41]/20 rounded-lg active:bg-[#00ff41]/20">
                                         <div class="flex items-center justify-between">
-                                            <div class="flex items-center gap-4">
+                                            <div class="flex items-center gap-3">
                                                 @if($dest->flag_path)
-                                                    <img src="{{ asset('storage/' . $dest->flag_path) }}" class="w-8 h-5 object-cover rounded-sm border border-[#00ff41]/30">
+                                                    <img src="{{ asset('storage/' . $dest->flag_path) }}" class="w-6 h-4 object-cover">
                                                 @else
-                                                    <span class="text-xl">🏳️</span>
+                                                    <span>🏳️</span>
                                                 @endif
-                                                <span class="tracking-widest">{{ $dest->name }}</span>
+                                                <span class="text-xs uppercase tracking-wider">{{ $dest->name }}</span>
                                             </div>
-                                            <input type="radio" name="country_id" value="{{ $dest->id }}" 
-                                                   data-name="{{ $dest->name }}"
-                                                   data-x="{{ $dest->coord_x ?? 50 }}" 
-                                                   data-y="{{ $dest->coord_y ?? 50 }}" 
-                                                   data-lat="{{ $dest->latitude ?? 0 }}"
-                                                   data-lng="{{ $dest->longitude ?? 0 }}"
-                                                   class="accent-[#00ff41]" required>
+                                            <input type="radio" name="country_id" value="{{ $dest->id }}" data-name="{{ $dest->name }}" data-x="{{ $dest->coord_x ?? 50 }}" data-y="{{ $dest->coord_y ?? 50 }}" data-lat="{{ $dest->latitude ?? 0 }}" data-lng="{{ $dest->longitude ?? 0 }}" class="accent-[#00ff41]" required>
                                         </div>
                                     </label>
                                 @endforeach
                             </form>
                         </div>
-                        
-                        <button type="submit" form="travelForm" class="w-full bg-[#00ff41] text-black font-bold py-4 hover:shadow-[0_0_30px_rgba(0,255,65,0.5)] transition uppercase tracking-[0.3em] rounded-lg shrink-0">
-                            Iniciar Decolagem
+                        <button type="submit" form="travelFormMobile" class="w-full bg-[#00ff41] text-black font-black py-4 uppercase tracking-widest rounded-lg text-sm shadow-[0_0_20px_rgba(0,255,65,0.3)]">
+                            Decolar
                         </button>
                     </div>
                 </div>
 
+                <!-- Informant Panel (Animated Transition) - Functional for both Desktop and Mobile -->
+                <div x-show="showInformant" 
+                     x-transition:enter="transition opacity-0 duration-300"
+                     x-transition:enter-end="opacity-100"
+                     class="absolute inset-0 bg-black z-[100] flex flex-col pointer-events-auto rounded-xl overflow-hidden shadow-2xl">
+                    
+                    <div class="informant-bg-zoom active" 
+                         style="background-image: url('{{ $currentCountry->images->first()?->image_path ? (str_contains($currentCountry->images->first()->image_path, 'http') ? $currentCountry->images->first()->image_path : asset('storage/' . $currentCountry->images->first()->image_path)) : asset('images/default_country.jpg') }}')">
+                        <div class="absolute inset-0 bg-black/60"></div>
+                    </div>
+
+                    <div class="absolute top-4 right-4 z-[110]">
+                        <button @click="informantActive = false; setTimeout(() => { showInformant = false }, 800)" 
+                                class="bg-red-600 text-white font-bold text-xs md:text-sm px-3 md:px-4 py-1 rounded hover:bg-red-700 transition border border-black shadow-lg">
+                            FECHAR [X]
+                        </button>
+                    </div>
+
+                    <img src="{{ $randomInformant?->image_path ? (str_contains($randomInformant->image_path, 'http') ? $randomInformant->image_path : asset('storage/' . $randomInformant->image_path)) : asset('images/default_informant.png') }}" 
+                         class="informant-character grayscale brightness-110 active w-auto h-[40%] md:h-[50%]">
+
+                    <div class="comic-bubble active !bottom-[45%] !left-[10%] md:!left-[32%] !max-w-[80%] md:!max-w-[60%]">
+                        <div class="space-y-3 md:space-y-4 pr-1 overflow-y-auto max-h-[30vh] custom-scrollbar"
+                             x-data="{ 
+                                get fontSize() {
+                                    const textLength = $el.innerText.length;
+                                    if (textLength > 300) return 'text-[0.65rem] md:text-[0.7rem] leading-tight';
+                                    if (textLength > 150) return 'text-[0.75rem] md:text-sm leading-snug';
+                                    return 'text-xs md:text-base';
+                                }
+                             }"
+                             :class="fontSize">
+                            @foreach($clues as $clue)
+                                <p class="italic font-bold">"{{ $clue->content }}"</p>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="news-label active pointer-events-none">
+                        {{ $randomInformant?->name ?? 'Informante' }}
+                    </div>
+                </div>
             </div>
         @endif
 
-        <!-- Footer / Tabs -->
-        <div class="mt-6 border-t border-[#00ff41] pt-4 flex gap-4 text-xs font-bold uppercase">
-            <div class="flex-grow">SISTEMA OPERACIONAL DETETIVE v5.0.1</div>
-            <div class="flex gap-8">
-                <span class="animate-pulse">ONLINE</span>
+        <!-- Footer / Mobile Tabs Navigation -->
+        <div class="mt-4 md:mt-6 border-t border-[#00ff41]/30 pt-4 flex flex-col md:flex-row gap-4 text-[8px] md:text-xs font-bold uppercase shrink-0">
+            <!-- Desktop Footer -->
+            <div class="hidden md:flex flex-grow items-center">SISTEMA OPERACIONAL DETETIVE v5.0.1</div>
+            <div class="hidden md:flex gap-8 items-center">
+                <span class="animate-pulse text-[#00ff41]">LOGADO // CONEXÃO CRIPTOGRAFADA</span>
                 <span>GPS: {{ rand(-90, 90) }}.{{ rand(1000, 9999) }}, {{ rand(-180, 180) }}.{{ rand(1000, 9999) }}</span>
+            </div>
+
+            <!-- Mobile Custom Navigation Bar -->
+            <div class="md:hidden fixed bottom-0 left-0 w-full bg-black/95 border-t-2 border-[#00ff41] shadow-[0_-10px_20px_rgba(0,255,65,0.1)] z-50 flex justify-around items-center h-16 px-2">
+                <button @click="currentTab = 'main'" 
+                        :class="currentTab === 'main' ? 'text-[#00ff41] border-t-2 border-[#00ff41] bg-[#00ff41]/10' : 'text-white/60'"
+                        class="flex flex-col items-center justify-center flex-1 h-full transition-all duration-300">
+                    <span class="text-xl">📄</span>
+                    <span class="text-[8px] mt-1 tracking-tighter">DOSSIÊ</span>
+                </button>
+                <button @click="currentTab = 'investigate'" 
+                        :class="currentTab === 'investigate' ? 'text-[#00ff41] border-t-2 border-[#00ff41] bg-[#00ff41]/10' : 'text-white/60'"
+                        class="flex flex-col items-center justify-center flex-1 h-full transition-all duration-300">
+                    <span class="text-xl">🔍</span>
+                    <span class="text-[8px] mt-1 tracking-tighter">INVESTIGAR</span>
+                </button>
+                <button @click="currentTab = 'travel'" 
+                        :class="currentTab === 'travel' ? 'text-[#00ff41] border-t-2 border-[#00ff41] bg-[#00ff41]/10' : 'text-white/60'"
+                        class="flex flex-col items-center justify-center flex-1 h-full transition-all duration-300">
+                    <span class="text-xl">✈️</span>
+                    <span class="text-[8px] mt-1 tracking-tighter">VOAR</span>
+                </button>
             </div>
         </div>
     </div>
