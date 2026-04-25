@@ -233,8 +233,8 @@
 <body class="min-h-screen flex items-center justify-center md:p-4" 
       x-data="{ 
         isFlying: false, 
-        showInformant: false, 
-        informantActive: false,
+        showInformant: true, 
+        informantActive: true,
         travelingTo: '',
         destX: 0,
         destY: 0,
@@ -474,12 +474,8 @@
                     <div class="hidden md:flex col-span-1 flex-col space-y-4 overflow-hidden">
                         <div class="glass-panel p-6 flex-grow relative overflow-hidden rounded-xl">
                             <h3 class="text-lg font-bold border-b border-[#00ff41] mb-6 uppercase shrink-0">Investigar</h3>
-                            <div class="flex flex-col items-center justify-center h-full space-y-6">
-                                <button @click="showInformant = true; setTimeout(() => { informantActive = true }, 100);" 
-                                        class="w-full py-8 border-2 border-dashed border-[#00ff41]/40 hover:border-[#00ff41] hover:bg-[#00ff41]/5 transition flex flex-col items-center rounded-xl">
-                                    <span class="text-4xl mb-4">🕵️‍♂️</span>
-                                    <span class="uppercase font-bold">Procurar Informante</span>
-                                </button>
+                            <div class="flex-grow flex flex-col items-center justify-center p-4">
+                                <p class="text-[10px] text-[#00ff41]/40 uppercase tracking-widest text-center">Interrogatório em andamento...</p>
                             </div>
                         </div>
                     </div>
@@ -527,12 +523,7 @@
                     <div class="glass-panel p-4 h-full relative overflow-hidden rounded-xl flex flex-col">
                         <h3 class="text-sm font-bold border-b border-[#00ff41] mb-6 uppercase shrink-0">Investigar</h3>
                         <div class="flex-grow flex flex-col items-center justify-center">
-                            <button @click="showInformant = true; setTimeout(() => { informantActive = true }, 100);" 
-                                    class="w-full py-12 border-2 border-dashed border-[#00ff41]/40 flex flex-col items-center rounded-xl bg-[#00ff41]/5">
-                                <span class="text-5xl mb-4">🕵️‍♂️</span>
-                                <span class="uppercase font-bold text-xs tracking-widest">Interrogar Local</span>
-                            </button>
-                            <p class="text-[8px] mt-4 text-center opacity-50 uppercase tracking-[0.2em]">Procure por pistas sobre o paradeiro do suspeito</p>
+                            <p class="text-[8px] mt-4 text-center text-[#00ff41]/40 uppercase tracking-[0.2em]">Interrogando fonte local sob custódia</p>
                         </div>
                     </div>
                 </div>
@@ -584,12 +575,7 @@
                         <div class="absolute inset-0 bg-black/60"></div>
                     </div>
 
-                    <div class="absolute top-4 right-4 z-[110]">
-                        <button @click="informantActive = false; setTimeout(() => { showInformant = false }, 800)" 
-                                class="bg-red-600 text-white font-bold text-xs md:text-sm px-3 md:px-4 py-1 rounded hover:bg-red-700 transition border border-black shadow-lg">
-                            FECHAR [X]
-                        </button>
-                    </div>
+                    <!-- Close Button Removed as Informant is always visible on this tab -->
 
                     <img src="{{ $randomInformant?->image_path ? (str_contains($randomInformant->image_path, 'http') ? $randomInformant->image_path : asset('storage/' . $randomInformant->image_path)) : asset('images/default_informant.png') }}" 
                          class="informant-character grayscale brightness-110 active w-auto h-[40%] md:h-[50%]">
