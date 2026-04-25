@@ -233,7 +233,7 @@
 <body class="min-h-screen flex items-center justify-center md:p-4" 
       x-data="{ 
         isFlying: false, 
-        showInformant: true, 
+        showInformant: false, 
         informantActive: true,
         travelingTo: '',
         destX: 0,
