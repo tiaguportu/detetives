@@ -470,12 +470,41 @@
                         </div>
                     </div>
 
-                    <!-- Hidden on Mobile when on Main tab, shown on Desktop -->
                     <div class="hidden md:flex col-span-1 flex-col space-y-4 overflow-hidden">
                         <div class="glass-panel p-6 flex-grow relative overflow-hidden rounded-xl">
                             <h3 class="text-lg font-bold border-b border-[#00ff41] mb-6 uppercase shrink-0">Investigar</h3>
-                            <div class="flex-grow flex flex-col items-center justify-center p-4">
-                                <p class="text-[10px] text-[#00ff41]/40 uppercase tracking-widest text-center">Interrogatório em andamento...</p>
+                            
+                            <!-- Desktop-Specific Informant View -->
+                            <div class="absolute inset-0 z-10 flex flex-col pointer-events-auto">
+                                <div class="informant-bg-zoom active" 
+                                     style="background-image: url('{{ $currentCountry->images->first()?->image_path ? (str_contains($currentCountry->images->first()->image_path, 'http') ? $currentCountry->images->first()->image_path : asset('storage/' . $currentCountry->images->first()->image_path)) : asset('images/default_country.jpg') }}')">
+                                    <div class="absolute inset-0 bg-black/60"></div>
+                                </div>
+
+                                <img src="{{ $randomInformant?->image_path ? (str_contains($randomInformant->image_path, 'http') ? $randomInformant->image_path : asset('storage/' . $randomInformant->image_path)) : asset('images/default_informant.png') }}" 
+                                     class="informant-character grayscale brightness-110 active w-auto h-[50%]"
+                                     style="left: 0; bottom: 0;">
+
+                                <div class="comic-bubble active !bottom-[45%] !left-[32%] !max-w-[60%]">
+                                    <div class="space-y-3 md:space-y-4 pr-1 overflow-y-auto max-h-[30vh] custom-scrollbar"
+                                         x-data="{ 
+                                            get fontSize() {
+                                                const textLength = $el.innerText.length;
+                                                if (textLength > 300) return 'text-[0.7rem] leading-tight';
+                                                if (textLength > 150) return 'text-sm leading-snug';
+                                                return 'text-base';
+                                            }
+                                         }"
+                                         :class="fontSize">
+                                        @foreach($clues as $clue)
+                                            <p class="italic font-bold">"{{ $clue->content }}"</p>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                                <div class="news-label active pointer-events-none">
+                                    {{ $randomInformant?->name ?? 'Informante' }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -518,80 +547,34 @@
                     </div>
                 </div>
 
-                <!-- Tab: Investigate (Mobile Only) -->
-                <div x-show="currentTab === 'investigate'" class="md:hidden h-full pb-20">
-                    <div class="glass-panel p-4 h-full relative overflow-hidden rounded-xl flex flex-col">
-                        <h3 class="text-sm font-bold border-b border-[#00ff41] mb-6 uppercase shrink-0">Investigar</h3>
-                        <div class="flex-grow flex flex-col items-center justify-center">
-                            <p class="text-[8px] mt-4 text-center text-[#00ff41]/40 uppercase tracking-[0.2em]">Interrogando fonte local sob custódia</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tab: Travel (Mobile Only) -->
-                <div x-show="currentTab === 'travel'" class="md:hidden h-full pb-20">
-                    <div class="glass-panel p-4 h-full rounded-xl flex flex-col overflow-hidden">
-                        <h3 class="text-sm font-bold border-b border-[#00ff41] mb-4 uppercase shrink-0">Sistemas de Voo</h3>
-                        <div class="flex-grow overflow-y-auto custom-scrollbar mb-4">
-                            <form action="{{ route('game.travel', $game) }}" id="travelFormMobile" method="POST" 
-                                  @submit.prevent="
-                                    const selected = document.querySelector('#travelFormMobile input[name=country_id]:checked');
-                                    startFlight(selected.dataset.name, selected.dataset.x, selected.dataset.y, selected.dataset.lat, selected.dataset.lng);
-                                    setTimeout(() => $el.submit(), 4000);
-                                  "
-                                  class="space-y-2">
-                                @csrf
-                                @foreach($destinations as $dest)
-                                    <label class="block p-3 border border-[#00ff41]/20 rounded-lg active:bg-[#00ff41]/20">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center gap-3">
-                                                @if($dest->flag_path)
-                                                    <img src="{{ asset('storage/' . $dest->flag_path) }}" class="w-6 h-4 object-cover">
-                                                @else
-                                                    <span>🏳️</span>
-                                                @endif
-                                                <span class="text-xs uppercase tracking-wider">{{ $dest->name }}</span>
-                                            </div>
-                                            <input type="radio" name="country_id" value="{{ $dest->id }}" data-name="{{ $dest->name }}" data-x="{{ $dest->coord_x ?? 50 }}" data-y="{{ $dest->coord_y ?? 50 }}" data-lat="{{ $dest->latitude ?? 0 }}" data-lng="{{ $dest->longitude ?? 0 }}" class="accent-[#00ff41]" required>
-                                        </div>
-                                    </label>
-                                @endforeach
-                            </form>
-                        </div>
-                        <button type="submit" form="travelFormMobile" class="w-full bg-[#00ff41] text-black font-black py-4 uppercase tracking-widest rounded-lg text-sm shadow-[0_0_20px_rgba(0,255,65,0.3)]">
-                            Decolar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Informant Panel (Animated Transition) - Functional for both Desktop and Mobile -->
-                <div x-show="showInformant || currentTab === 'investigate'" 
+                <!-- Tab: Investigate (Mobile Only) - Using the overlay behavior only for mobile -->
+                <div x-show="currentTab === 'investigate'" 
                      x-transition:enter="transition opacity-0 duration-300"
                      x-transition:enter-end="opacity-100"
-                     class="absolute inset-0 bg-black z-40 flex flex-col pointer-events-auto rounded-xl overflow-hidden shadow-2xl">
+                     class="md:hidden absolute inset-0 bg-black z-40 flex flex-col pointer-events-auto rounded-xl overflow-hidden shadow-2xl">
                     
                     <div class="informant-bg-zoom active" 
                          style="background-image: url('{{ $currentCountry->images->first()?->image_path ? (str_contains($currentCountry->images->first()->image_path, 'http') ? $currentCountry->images->first()->image_path : asset('storage/' . $currentCountry->images->first()->image_path)) : asset('images/default_country.jpg') }}')">
                         <div class="absolute inset-0 bg-black/60"></div>
                     </div>
 
-                    <!-- Botão de Fechar -->
-                    <button @click="showInformant = false; if(currentTab === 'investigate') currentTab = 'main'" 
-                            class="absolute top-4 right-4 z-[60] bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-lg hover:bg-red-700 transition-colors">
+                    <!-- Botão de Fechar no Mobile -->
+                    <button @click="currentTab = 'main'" 
+                            class="absolute top-4 right-4 z-[60] bg-red-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold shadow-lg">
                         X
                     </button>
 
                     <img src="{{ $randomInformant?->image_path ? (str_contains($randomInformant->image_path, 'http') ? $randomInformant->image_path : asset('storage/' . $randomInformant->image_path)) : asset('images/default_informant.png') }}" 
-                         class="informant-character grayscale brightness-110 active w-auto h-[40%] md:h-[50%]">
+                         class="informant-character grayscale brightness-110 active w-auto h-[40%]">
 
-                    <div class="comic-bubble active !bottom-[45%] !left-[10%] md:!left-[32%] !max-w-[80%] md:!max-w-[60%]">
-                        <div class="space-y-3 md:space-y-4 pr-1 overflow-y-auto max-h-[30vh] custom-scrollbar"
+                    <div class="comic-bubble active !bottom-[45%] !left-[10%] !max-w-[80%]">
+                        <div class="space-y-3 pr-1 overflow-y-auto max-h-[30vh] custom-scrollbar"
                              x-data="{ 
                                 get fontSize() {
                                     const textLength = $el.innerText.length;
-                                    if (textLength > 300) return 'text-[0.65rem] md:text-[0.7rem] leading-tight';
-                                    if (textLength > 150) return 'text-[0.75rem] md:text-sm leading-snug';
-                                    return 'text-xs md:text-base';
+                                    if (textLength > 300) return 'text-[0.65rem] leading-tight';
+                                    if (textLength > 150) return 'text-[0.75rem] leading-snug';
+                                    return 'text-xs';
                                 }
                              }"
                              :class="fontSize">
